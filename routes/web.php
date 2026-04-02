@@ -11,9 +11,47 @@ Route::get('/login', function () {
     return view('index');
 });
 
-// Route::get('/buku', function () {
-//     return view('buku');
-// });
+
+//Anggota
+Route::get('/dashboard', function () {
+    return view('anggota.dashboard');
+});
+
+Route::get('/lay', function () {
+    return view('layout.sidebaranggota');
+});
+
+Route::get('/katalog', function () {
+    return view('anggota.daftarbuku.buku');
+});
+
+Route::get('/riwayat', function () {
+    return view('anggota.riwayat.pinjaman');
+});
+
+Route::get('/profile', function () {
+    return view('anggota.profile.profileanggota');
+});
+
+//KepalaPerpustakaan
+Route::get('/lai', function () {
+    return view('layout.sidebarkepalaperpus');
+});
+
+//Petugas
+Route::get('/lap', function () {
+    return view('layout.sidebarpetugas');
+});
+
+Route::get('/dashboardpetugas', function () {
+    return view('petugas.dashboard');
+});
+
+
+
+Route::get('/buku', function () {
+    return view('daftarbuku.buku');
+ });
 
 Route::controller(BukuController::class)->group(function () {
     Route::get('/buku', 'index')->name('buku.index');

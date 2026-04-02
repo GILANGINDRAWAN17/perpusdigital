@@ -9,7 +9,7 @@
 
 <div class="container mx-auto px-6 py-10">
 
-    <div class="bg-white p-6 rounded shadow-md">
+    <div class="bg-white p-6 rounded-xl shadow-md">
 
         <h2 class="text-xl font-bold mb-6">➕ Tambah Buku</h2>
 

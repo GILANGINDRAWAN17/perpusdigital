@@ -11,13 +11,13 @@ class BukuController extends Controller
     public function index(Request $request)
     {
         $buku = Buku::all();
-        return view('buku', compact('buku'));
+        return view('petugas.daftarbuku.buku', compact('buku'));
     }
 
 
     public function create()
     {
-        return view('tambahbuku');
+        return view('petugas.daftarbuku.tambahbuku');
     }
 
     public function store(Request $request)
@@ -44,7 +44,7 @@ class BukuController extends Controller
 
     public function edit(Buku $buku)
     {
-        return view('editbuku', ["buku" => $buku]);
+        return view('petugas.daftarbuku.editbuku', ["buku" => $buku]);
     }
 
     public function update(Request $request, Buku $buku)

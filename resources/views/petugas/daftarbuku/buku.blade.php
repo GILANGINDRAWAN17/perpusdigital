@@ -22,6 +22,7 @@
             <thead class="bg-gray-200 text-sm">
                 <tr>
                     <th class="p-3">No</th>
+                    <th class="p-3">Kode Buku</th>
                     <th class="p-3">Cover</th>
                     <th class="p-3">Judul</th>
                     <th class="p-3">Penulis</th>
@@ -35,7 +36,8 @@
                 @forelse ($buku as $item)
                 <tr class="border-b hover:bg-gray-100">
                     <td class="p-3">{{ $loop->iteration }}</td>
-
+                    
+                    <td class="p-3 font-semibold">{{ $item->kode_buku }}</td>
                     <td class="p-3">
                         @if($item->cover_image)
                             <img src="{{ asset('storage/'.$item->cover_image) }}"
@@ -52,10 +54,10 @@
 
                         <!-- VIEW -->
                         {{-- <a href="{{ route('buku.show', $item->id) }}" --}}
-                        <a href="#"
+                        {{-- <a href="#"
                         class="bg-green-500 text-white px-3 py-1 rounded">
                             View
-                        </a>
+                        </a> --}}
 
                         <!-- EDIT -->
                         <a href="{{ route('buku.edit', $item->id) }}"
