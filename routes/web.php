@@ -13,12 +13,9 @@ Route::get('/login', function () {
 
 
 //Anggota
+
 Route::get('/dashboard', function () {
     return view('anggota.dashboard');
-});
-
-Route::get('/lay', function () {
-    return view('layout.sidebaranggota');
 });
 
 Route::get('/katalog', function () {
@@ -34,24 +31,54 @@ Route::get('/profile', function () {
 });
 
 //KepalaPerpustakaan
-Route::get('/lai', function () {
-    return view('layout.sidebarkepalaperpus');
+
+Route::get('/dashboardkepalaperpus', function () {
+    return view('kepalaperpus.dashboard');
+});
+
+Route::get('/transaksi', function () {
+    return view('kepalaperpus.transaksi');
+});
+
+Route::get('/daftarbukukep', function () {
+    return view('kepalaperpus.daftarbuku.buku');
+});
+
+Route::get('/daftaruser', function () {
+    return view('kepalaperpus.daftaruser.user');
+});
+
+Route::get('/profilekepala', function () {
+    return view('kepalaperpus.profile.profilekepalaperpus');
 });
 
 //Petugas
-Route::get('/lap', function () {
-    return view('layout.sidebarpetugas');
-});
 
 Route::get('/dashboardpetugas', function () {
     return view('petugas.dashboard');
 });
 
+Route::get('/peminjaman', function () {
+    return view('petugas.peminjaman.buku');
+});
 
+Route::get('/pengembalian', function () {
+    return view('petugas.pengembalian.buku');
+});
 
-Route::get('/buku', function () {
-    return view('daftarbuku.buku');
- });
+Route::get('/daftarbuku', function () {
+    return view('petugas.daftarbuku.buku');
+});
+
+Route::get('/profilepetugas', function () {
+    return view('petugas.profile.profilepetugas');
+});
+
+//Databuku
+Route::get('/daftarbuku', function () {
+    $buku = App\Models\Buku::all();
+    return view('petugas.daftarbuku.buku', compact('buku'));
+});
 
 Route::controller(BukuController::class)->group(function () {
     Route::get('/buku', 'index')->name('buku.index');

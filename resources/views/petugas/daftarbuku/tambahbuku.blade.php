@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Tambah Buku</title>
     @vite('resources/css/app.css')
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
 <body class="bg-gray-100">
 
@@ -11,7 +15,7 @@
 
     <div class="bg-white p-6 rounded-xl shadow-md">
 
-        <h2 class="text-xl font-bold mb-6">➕ Tambah Buku</h2>
+        <h2 class="text-xl font-bold mb-6">Tambah Buku</h2>
 
         <form action="{{ route('buku.store') }}"
               method="POST"
@@ -78,14 +82,14 @@
             </div>
 
             <!-- Button -->
-            <div class="mt-6 flex gap-2">
+            <div class="mt-6 flex justify-center gap-2">
                 <button type="submit"
-                        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                        class="bg-[#004d4d] hover:bg-[#003d3d] text-white font-semibold transition-all duration-300 px-4 py-2 rounded shadow-md">
                     Simpan
                 </button>
 
                 <a href="{{ route('buku.index') }}"
-                   class="bg-gray-500 text-white px-4 py-2 rounded">
+                   class="bg-gray-500 hover:bg-gray-600 text-white font-semibold transition-all duration-300 px-4 py-2 rounded shadow-md">
                     Kembali
                 </a>
             </div>

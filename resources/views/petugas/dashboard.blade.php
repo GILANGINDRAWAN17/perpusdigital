@@ -20,11 +20,11 @@
         <header class="flex justify-between items-start mb-8">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">Selamat Datang, Username!</h1>
-                <p class="text-gray-500 text-sm">Berikut ringkasan aktivitas perpustakaan</p>
+                <p class="text-gray-500 text-sm mt-1">Berikut ringkasan aktivitas perpustakaan</p>
             </div>
             <div class="flex items-center gap-4">
                 <div class="relative bg-white p-2 rounded-full shadow-sm cursor-pointer border border-gray-100">
-                    <i data-lucide="bell" class="w-6 h-6 text-teal-500"></i>
+                    <i data-lucide="bell" class="w-6 h-6 text-[#004d4d]"></i>
                     <span class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">3</span>
                 </div>
             </div>
@@ -32,34 +32,34 @@
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                <div class="text-teal-400"><i data-lucide="book-copy" class="w-10 h-10"></i></div>
+                <div class="text-[#004d4d]"><i data-lucide="book-copy" class="w-10 h-10"></i></div>
                 <div>
-                    <p class="text-[10px] font-bold text-gray-800 uppercase tracking-wider leading-none mb-1">Total Buku</p>
-                    <span class="text-3xl font-bold text-teal-400">0</span>
+                    <p class="text-sm font-bold text-gray-800 mb-1">Total Buku</p>
+                    <span class="text-3xl font-bold text-[#004d4d]">0</span>
                 </div>
             </div>
             <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                <div class="text-teal-400"><i data-lucide="book-open-check" class="w-10 h-10"></i></div>
+                <div class="text-[#004d4d]"><i data-lucide="book-open-check" class="w-10 h-10"></i></div>
                 <div>
-                    <p class="text-[10px] font-bold text-gray-800 uppercase tracking-wider leading-none mb-1">Dipinjam</p>
-                    <span class="text-3xl font-bold text-teal-400">0</span>
+                    <p class="text-sm font-bold text-gray-800 mb-1">Dipinjam</p>
+                    <span class="text-3xl font-bold text-[#004d4d]">0</span>
                 </div>
             </div>
             <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                <div class="text-teal-400"><i data-lucide="circle-dollar-sign" class="w-10 h-10"></i></div>
+                <div class="text-[#004d4d]"><i data-lucide="circle-dollar-sign" class="w-10 h-10"></i></div>
                 <div>
-                    <p class="text-[10px] font-bold text-gray-800 uppercase tracking-wider leading-none mb-1">Denda</p>
+                    <p class="text-sm font-bold text-gray-800 mb-1">Denda</p>
                     <div class="flex items-baseline gap-1">
-                        <span class="text-sm font-bold text-teal-400">Rp</span>
-                        <span class="text-3xl font-bold text-teal-400">0</span>
+                        <span class="text-sm font-bold text-[#004d4d]">Rp</span>
+                        <span class="text-3xl font-bold text-[#004d4d]">0</span>
                     </div>
                 </div>
             </div>
             <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                <div class="text-teal-400"><i data-lucide="history" class="w-10 h-10"></i></div>
+                <div class="text-[#004d4d]"><i data-lucide="users" class="w-10 h-10"></i></div>
                 <div>
-                    <p class="text-[10px] font-bold text-gray-800 uppercase tracking-wider leading-none mb-1">Anggota</p>
-                    <span class="text-3xl font-bold text-teal-400">0</span>
+                    <p class="text-sm font-bold text-gray-800 mb-1">Anggota</p>
+                    <span class="text-3xl font-bold text-[#004d4d]">0</span>
                 </div>
             </div>
         </div>

@@ -18,7 +18,7 @@
 
 <body class="bg-[#E2EDED] min-h-screen flex">
 
-    @include('layout.sidebaranggota')
+    @include('layout.sidebarkepalaperpus')
 
     <main class="flex-1 p-8 overflow-y-auto">
 
@@ -46,9 +46,8 @@
                 <p class="text-slate-500">email@gmail.com</p>
                 <div class="flex gap-2 mt-4">
                     <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Aktif</span>
-                    <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Anggota</span>
-                    <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Total Pinjaman :
-                        0</span>
+                    <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Kepala
+                        Perpustakaan</span>
                 </div>
             </div>
         </div>

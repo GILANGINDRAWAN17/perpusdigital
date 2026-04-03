@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Edit Buku</title>
     @vite('resources/css/app.css')
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
 <body class="bg-gray-100">
 
@@ -11,7 +15,7 @@
 
     <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-xl p-8">
 
-        <h2 class="text-2xl font-bold mb-6 text-gray-800">✏️ Edit Buku</h2>
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Edit Buku</h2>
 
         <form action="{{ route('buku.update', $buku->id) }}"
               method="POST"
@@ -83,8 +87,7 @@
                            class="mt-1 w-full border rounded-lg p-2 bg-white">
 
                     @if($buku->cover_image)
-                        <img src="{{ asset('storage/'.$buku->cover_image) }}"
-                             class="mt-3 w-28 rounded shadow">
+                        <img src="{{ asset('storage/'.$buku->cover_image) }}" class="mt-4">
                     @endif
 
                     @error('cover_image')
@@ -106,14 +109,14 @@
             </div>
 
             <!-- Button -->
-            <div class="mt-6 flex gap-3">
+            <div class="mt-6 flex justify-center gap-3">
                 <button type="submit"
-                        class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg shadow">
+                        class="bg-[#004d4d] hover:bg-[#003d3d] text-white px-5 py-2 font-semibold rounded-lg transition-all duration-300 shadow-md">
                     Update
                 </button>
 
                 <a href="{{ route('buku.index') }}"
-                   class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
+                   class="bg-gray-500 hover:bg-gray-600 text-white font-semibold transition-all duration-300 px-5 py-2 rounded-lg shadow-md">
                     Kembali
                 </a>
             </div>

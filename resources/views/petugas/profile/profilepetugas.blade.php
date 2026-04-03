@@ -18,14 +18,14 @@
 
 <body class="bg-[#E2EDED] min-h-screen flex">
 
-    @include('layout.sidebaranggota')
+    @include('layout.sidebarpetugas')
 
     <main class="flex-1 p-8 overflow-y-auto">
 
         <header class="flex justify-between items-start mb-8">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">Profile</h1>
-                <p class="text-gray-500 text-sm mt-1">Kelola Akun Anda</p>
+                <p class="text-gray-500 text-sm">Kelola Akun Anda</p>
             </div>
             <div class="flex items-center gap-4">
                 <div class="relative bg-white p-2 rounded-full shadow-sm cursor-pointer border border-gray-100">
@@ -46,9 +46,8 @@
                 <p class="text-slate-500">email@gmail.com</p>
                 <div class="flex gap-2 mt-4">
                     <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Aktif</span>
-                    <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Anggota</span>
-                    <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Total Pinjaman :
-                        0</span>
+                    <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Petugas</span>
+
                 </div>
             </div>
         </div>

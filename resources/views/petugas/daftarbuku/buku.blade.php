@@ -1,97 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Data Buku</title>
     @vite('resources/css/app.css')
+    
 </head>
-<body class="bg-gray-100">
 
-<div class="container mx-auto px-6 py-8">
+<body class="bg-[#E2EDED] min-h-screen flex">
 
-    <div class="flex justify-between mb-6">
-        <h1 class="text-2xl font-bold">📚 Data Buku</h1>
-        <a href="{{ route('buku.create') }}"
-           class="bg-blue-500 text-white px-4 py-2 rounded-lg">
-            + Tambah Buku
-        </a>
-    </div>
+    @include('layout.sidebarpetugas')
 
-    <div class="bg-white shadow rounded-lg overflow-hidden">
-        <table class="min-w-full">
-            <thead class="bg-gray-200 text-sm">
-                <tr>
-                    <th class="p-3">No</th>
-                    <th class="p-3">Kode Buku</th>
-                    <th class="p-3">Cover</th>
-                    <th class="p-3">Judul</th>
-                    <th class="p-3">Penulis</th>
-                    <th class="p-3">Tahun</th>
-                    <th class="p-3">Stock</th>
-                    <th class="p-3 text-center">Aksi</th>
-                </tr>
-            </thead>
+    <main class="flex-1 p-8 overflow-y-auto">
 
-            <tbody>
-                @forelse ($buku as $item)
-                <tr class="border-b hover:bg-gray-100">
-                    <td class="p-3">{{ $loop->iteration }}</td>
-                    
-                    <td class="p-3 font-semibold">{{ $item->kode_buku }}</td>
-                    <td class="p-3">
-                        @if($item->cover_image)
-                            <img src="{{ asset('storage/'.$item->cover_image) }}"
-                                 class="w-14 h-20 object-cover rounded">
-                        @endif
-                    </td>
+        <header class="flex justify-between items-start mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Daftar Buku Perpustakaan</h1>
+                <p class="text-gray-500 text-sm mt-1">Kelola Buku Perpustakaan</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="relative bg-white p-2 rounded-full shadow-sm cursor-pointer border border-gray-100">
+                    <i data-lucide="bell" class="w-6 h-6 text-[#004d4d]"></i>
+                    <span
+                        class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">3</span>
+                </div>
+            </div>
+        </header>
 
-                    <td class="p-3 font-semibold">{{ $item->judul_buku }}</td>
-                    <td class="p-3">{{ $item->penulis }}</td>
-                    <td class="p-3">{{ \Carbon\Carbon::parse($item->tahun_terbit)->format('Y') }}</td>
-                    <td class="p-3">{{ $item->stock_buku }}</td>
+        <div class="flex justify-between items-center mb-10">
 
-                    <td class="p-3 text-center space-x-2">
+            <div class="flex gap-4">
+                <div class="relative flex-1 max-w-xs shadow-lg">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
+                    <input type="text" placeholder="Cari Buku..."
+                        class="w-full pl-12 pr-4 py-3.5 rounded-xl border-none focus:ring-2 focus:ring-[#004d4d] outline-none">
+                </div>
 
-                        <!-- VIEW -->
-                        {{-- <a href="{{ route('buku.show', $item->id) }}" --}}
-                        {{-- <a href="#"
-                        class="bg-green-500 text-white px-3 py-1 rounded">
-                            View
-                        </a> --}}
+                <button
+                    class="bg-[#004d4d] px-10 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
+                    Cari
+                </button>
+            </div>
 
-                        <!-- EDIT -->
-                        <a href="{{ route('buku.edit', $item->id) }}"
-                           class="bg-yellow-400 text-white px-3 py-1 rounded">
-                            Edit
-                        </a>
+            <a href="{{ route('buku.create') }}"
+                class="bg-[#004d4d] text-white px-6 py-3.5 rounded-lg font-semibold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
+                + Tambah Buku
+            </a>
 
-                        <!-- DELETE -->
-                        <form action="{{ route('buku.destroy', $item->id) }}"
-                              method="POST"
-                              class="inline"
-                              onsubmit="return confirm('Yakin hapus data?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="bg-red-500 text-white px-3 py-1 rounded">
-                                Hapus
-                            </button>
-                        </form>
+        </div>
 
-                    </td>
-                </tr>
+        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[500px]">
 
-                @empty
-                <tr>
-                    <td colspan="7" class="text-center p-5 text-gray-500">
-                        Data kosong
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+            <!-- HEADER -->
+            <div class="px-8 py-5 border-b border-gray-100">
+                <h3 class="font-semibold text-slate-700 text-md">Daftar Buku</h3>
+            </div>
 
-</div>
+            <!-- TABLE -->
+            <div class="flex overflow-x-auto">
+                <table class="min-w-full text-sm">
+
+                    <!-- THEAD -->
+                    <thead class="bg-[#004d4d] text-white">
+                        <tr class="text-center">
+                            <th class="p-3">No</th>
+                            <th class="p-3">Kode Buku</th>
+                            <th class="p-3">Cover</th>
+                            <th class="p-3">Judul</th>
+                            <th class="p-3">Penulis</th>
+                            <th class="p-3">Tahun</th>
+                            <th class="p-3">Stock</th>
+                            <th class="p-3">Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <!-- TBODY -->
+                    <tbody>
+                        @forelse ($buku as $item)
+                            <tr class="border-b hover:bg-gray-100 text-center">
+                                <td class="p-3">{{ $loop->iteration }}</td>
+
+                                <td class="p-3 font-semibold">{{ $item->kode_buku }}</td>
+                                <td class="p-3">
+                                    @if ($item->cover_image)
+                                        <img src="{{ asset('storage/' . $item->cover_image) }}"
+                                            class="w-14 h-20 object-cover rounded">
+                                    @endif
+                                </td>
+
+                                <td class="p-3 font-semibold">{{ $item->judul_buku }}</td>
+                                <td class="p-3">{{ $item->penulis }}</td>
+                                <td class="p-3">{{ \Carbon\Carbon::parse($item->tahun_terbit)->format('Y') }}</td>
+                                <td class="p-3">{{ $item->stock_buku }}</td>
+
+                                <td class="p-3 text-center space-x-2">
+
+
+                                    <!-- EDIT -->
+                                    <a href="{{ route('buku.edit', $item->id) }}"
+                                        class="bg-yellow-400 text-white px-3 py-1 font-medium rounded hover:bg-yellow-500 transition-all duration-300">
+                                        Edit
+                                    </a>
+
+                                    <!-- DELETE -->
+                                    <form action="{{ route('buku.destroy', $item->id) }}" method="POST" class="inline"
+                                        onsubmit="return confirm('Data buku akan dihapus, lanjutkan?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="bg-red-500 text-white px-3 py-1 font-medium rounded hover:bg-red-600 transition-all duration-300">
+                                            Hapus
+                                        </button>
+                                    </form>
+
+                                </td>
+                            </tr>
+
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center p-5 text-gray-500">
+                                    Data kosong
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+
+                </table>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        // Inisialisasi Lucide Icons
+        lucide.createIcons();
+    </script>
 
 </body>
+
 </html>
