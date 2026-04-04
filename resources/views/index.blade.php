@@ -5,78 +5,202 @@
     <meta charset="UTF-8">
     <title>Login Pustaka</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
 
-<body class="bg-teal-100 min-h-screen flex items-center justify-center">
+<body class="bg-gradient-to-br from-[#003d3d] to-[#017d7d] min-h-screen flex items-center justify-center">
 
-    <div class="w-full max-w-6xl bg-teal-400 scale-90 border flex rounded-2xl shadow-lg overflow-hidden">
+
+    <div id="container"
+        class="w-full max-w-6xl h-[630px] bg-[#004d4d] scale-90 flex rounded-2xl shadow-2xl overflow-hidden relative">
+
+
 
         <!-- LEFT SIDE -->
-        <div class="w-1/2 p-12 text-white">
+        <div id="leftPanel" class="w-1/2 p-12 text-white transition-all duration-700 ease-in-out scale-100 opacity-100">
 
             <!-- Logo -->
-            <div class="mb-8">
-                <div class="text-4xl mb-2 text-center">📖</div>
-                <h1 class="text-3xl text-center font-bold">Selamat Datang</h1>
-                <p class="text-lg text-center">di Pustaka</p>
+            <div class="mb-2">
+                <i data-lucide="book-open" class="text-white w-10 h-10 mx-auto mb-2"></i>
+
+                <h1 id="title" class="text-3xl text-center font-bold">
+                    Selamat Datang
+                </h1>
+
             </div>
 
-            <p class="mb-6 text-center text-sm">Silahkan login terlebih dahulu</p>
+            <p id="desc" class="mb-6 text-center text-sm font-light">
+                Silahkan login terlebih dahulu
+            </p>
 
             <!-- Form -->
-            <form>
+            <form class="max-w-sm mx-auto">
+
+                <!-- EMAIL (REGISTER ONLY) -->
+                <div id="emailField" class="mb-4 hidden">
+                    <label class="block text-sm mb-2 font-medium text-white">Email</label>
+
+                    <div
+                        class="flex items-center bg-white rounded-full px-4 py-3 text-black gap-4 shadow-lg border border-gray-200 focus-within:ring-2 focus-within:ring-[#00b39e] focus-within:border-[#00b39e] transition-all duration-300">
+                        
+                        <i data-lucide="mail" class="text-[#004d4d]"></i>
+                       
+                        <input type="text" placeholder="Masukkan email anda..."
+                            class="w-full outline-none text-md placeholder-gray-400 bg-transparent">
+                    </div>
+                </div>
 
                 <!-- Username -->
                 <div class="mb-4">
-                    <label class="block text-sm mb-1">Username</label>
-                    <div class="flex items-center bg-white rounded-lg px-3 py-2 text-black">
-                        <span class="mr-2">👤</span>
-                        <input type="text" placeholder="Masukkan username anda" class="w-full outline-none text-sm">
+                    <label class="block text-sm mb-2 font-medium text-white">Username</label>
+
+                    <div
+                        class="flex items-center bg-white rounded-full px-4 py-3 text-black gap-4 shadow-lg border border-gray-200 focus-within:ring-2 focus-within:ring-[#00b39e] focus-within:border-[#00b39e] transition-all duration-300">
+
+                        <i data-lucide="user" class="text-[#004d4d]"></i>
+
+                        <input id="usernameInput" type="text" placeholder="Masukkan username anda..."
+                            class="w-full outline-none text-md placeholder-gray-400 bg-transparent">
                     </div>
                 </div>
 
                 <!-- Password -->
                 <div class="mb-2">
-                    <label class="block text-sm mb-1">Password</label>
-                    <div class="flex items-center bg-white rounded-lg px-3 py-2 text-black">
-                        <span class="mr-2">🔑</span>
-                        <input type="password" placeholder="Masukkan password anda" class="w-full outline-none text-sm">
+                    <label class="block text-sm mb-2 font-medium text-white">Password</label>
+
+                    <div
+                        class="flex items-center bg-white rounded-full px-4 py-3 text-black gap-4 shadow-lg border border-gray-200 focus-within:ring-2 focus-within:ring-[#00b39e] focus-within:border-[#00b39e] transition-all duration-300">
+
+                        <i data-lucide="key" class="text-[#004d4d]"></i>
+
+                        <input id="passwordInput" type="password" placeholder="Masukkan password anda..."
+                            class="w-full outline-none text-md placeholder-gray-400 bg-transparent">
+                            
                     </div>
                 </div>
 
-                <div class="text-right mb-4">
-                    <a href="#" class="text-xs underline">Lupa Password?</a>
+                <div id="forgotPassword" class="text-right">
+                    <a href="#" class="text-xs font-medium hover:underline">Lupa Password?</a>
                 </div>
 
                 <!-- Button -->
-                <button class="w-full bg-teal-900 hover:bg-teal-800 py-2 rounded-lg">
+                <button id="submitBtn"
+                    class="w-full font-medium bg-[#002b2b] hover:bg-[#001f1f] py-3 mt-6 rounded-full border-none shadow-md hover:scale-95 shadow-[#003d3d] hover:shadow-xl transition-all duration-300">
                     Login
                 </button>
 
-                <p class="text-xs mt-4 text-center text-black">
-                    Belum memiliki akun?
-                    <a href="#" class="underline">Register</a>
-                </p>
-
             </form>
 
-            <p class="text-xs mt-8 text-center text-black">
+            <p class="text-xs mt-8 text-center opacity-30 font-light text-white">
                 © 2026 Gilang Indrawan <br> SMKN 3 BANJAR
             </p>
         </div>
 
         <!-- RIGHT SIDE -->
-        <div class="w-1/2 relative bg-white flex items-center justify-center">
+        <div id="rightPanel"
+            class="w-1/2 p-12 bg-white flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
 
-            <!-- Image -->
-            <img src="{{ asset('images/satoru_gojo_render__by_norm4nsz_dhlt2jw-pre.png') }}" width="320px">
+            <div class="mb-10 text-[#003d3d]">
+                <p id="rightTitle" class="text-xl text-center font-bold mb-4">
+                    Belum Memiliki Akun?
+                </p>
+                <p id="rightDesc" class="text-center text-sm font-light">
+                    Silahkan Registrasi akun terlebih dahulu
+                </p>
+            </div>
 
-            <p class="absolute bottom-2 right-4 text-xs text-gray-700">
-                Illustration by DevianArt
-            </p>
+            <button onclick="togglePanel()" id="switchBtn" type="button"
+                class="font-medium bg-[#004d4d] text-white px-12 py-4 hover:bg-[#003d3d] border-none hover:shadow-xl rounded-full shadow-md hover:scale-95 transition-all duration-300">
+                Register
+            </button>
+
         </div>
 
     </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+
+        let isRegister = false;
+
+        function togglePanel() {
+            const left = document.getElementById("leftPanel");
+            const right = document.getElementById("rightPanel");
+
+            const username = document.getElementById("usernameInput");
+            const password = document.getElementById("passwordInput");
+
+            if (!isRegister) {
+                username.placeholder = "Buat username anda...";
+                password.placeholder = "Buat password anda...";
+            } else {
+                username.placeholder = "Masukkan username anda...";
+                password.placeholder = "Masukkan password anda...";
+            }
+
+            const title = document.getElementById("title");
+            const desc = document.getElementById("desc");
+            const btn = document.getElementById("submitBtn");
+            const email = document.getElementById("emailField");
+
+            const rightTitle = document.getElementById("rightTitle");
+            const rightDesc = document.getElementById("rightDesc");
+
+
+            const forgot = document.getElementById("forgotPassword");
+
+            if (!isRegister) {
+
+                forgot.classList.add("hidden");
+            } else {
+
+                forgot.classList.remove("hidden");
+            }
+
+            const switchBtn = document.getElementById("switchBtn");
+
+            if (!isRegister) {
+                switchBtn.innerText = "Login";
+            } else {
+                switchBtn.innerText = "Register";
+            }
+
+
+            // ANIMASI GESER
+            left.classList.toggle("translate-x-full");
+            right.classList.toggle("-translate-x-full");
+
+            // UBAH FORM
+            if (!isRegister) {
+                title.innerText = "Buat Akun";
+                desc.innerText = "Silahkan isi data untuk registrasi";
+                btn.innerText = "Register";
+
+                rightTitle.innerText = "Sudah Punya Akun?";
+                rightDesc.innerText = "Silahkan Login ke akun anda";
+
+                email.classList.remove("hidden");
+            } else {
+                title.innerText = "Selamat Datang";
+                desc.innerText = "Silahkan login terlebih dahulu";
+                btn.innerText = "Login";
+
+                rightTitle.innerText = "Belum Memiliki Akun?";
+                rightDesc.innerText = "Lakukan Registrasi akun terlebih dahulu";
+
+                email.classList.add("hidden");
+            }
+
+            isRegister = !isRegister;
+        }
+    </script>
 
 </body>
 
