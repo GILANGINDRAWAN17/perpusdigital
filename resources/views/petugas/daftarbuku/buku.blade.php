@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Data Buku</title>
+    <title>Daftar Buku</title>
     @vite('resources/css/app.css')
-    
+
 </head>
 
 <body class="bg-[#E2EDED] min-h-screen flex">
@@ -31,7 +31,7 @@
         <div class="flex justify-between items-center mb-10">
 
             <div class="flex gap-4">
-                <div class="relative flex-1 max-w-xs shadow-lg">
+                <div class="relative flex-1 max-w-md shadow-lg">
                     <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
                     <input type="text" placeholder="Cari Buku..."
                         class="w-full pl-12 pr-4 py-3.5 rounded-xl border-none focus:ring-2 focus:ring-[#004d4d] outline-none">
@@ -99,16 +99,17 @@
 
                                     <!-- EDIT -->
                                     <a href="{{ route('buku.edit', $item->id) }}"
-                                        class="bg-yellow-400 text-white px-3 py-1 font-medium rounded hover:bg-yellow-500 transition-all duration-300">
+                                        class="bg-yellow-400 text-white px-3 py-1 font-medium rounded border border-yellow-400 hover:bg-yellow-500 transition-all duration-300">
                                         Edit
                                     </a>
 
                                     <!-- DELETE -->
                                     <form action="{{ route('buku.destroy', $item->id) }}" method="POST" class="inline"
-                                        onsubmit="return confirm('Data buku akan dihapus, lanjutkan?')">
+                                        onsubmit="return false">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="bg-red-500 text-white px-3 py-1 font-medium rounded hover:bg-red-600 transition-all duration-300">
+                                        <button type="button" onclick="handleDelete(this, '{{ $item->judul_buku }}')"
+                                            class="bg-red-500 text-white px-3 py-1 font-medium rounded transition-all duration-300">
                                             Hapus
                                         </button>
                                     </form>
@@ -130,12 +131,28 @@
 
         </section>
 
+
     </main>
 
+    @include('layout.globalmodal')
+
     <script>
-        // Inisialisasi Lucide Icons
         lucide.createIcons();
+
+        function handleDelete(btn, title) {
+            const form = btn.closest("form");
+
+            openModal(
+                "Hapus Buku",
+                `Yakin hapus "<b>${title}</b>"?`,
+                function() {
+                    form.submit();
+                }
+            );
+        }
     </script>
+
+
 
 </body>
 
