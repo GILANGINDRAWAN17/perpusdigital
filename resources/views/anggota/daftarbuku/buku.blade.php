@@ -37,7 +37,7 @@
         </header>
         
         <div class="flex gap-4 mb-10">
-            <div class="relative flex-1 max-w-md shadow-sm">
+            <div class="relative flex-1 max-w-sm shadow-sm">
                 <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
                 <input type="text" placeholder="Cari buku..."
                     class="w-full pl-12 pr-4 py-3.5 rounded-xl border-none focus:ring-2 focus:ring-[#004d4d] outline-none">

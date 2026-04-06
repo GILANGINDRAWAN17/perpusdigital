@@ -15,9 +15,50 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        // Angota
+        User::create([
+           "username"   =>    "Gilanguno",
+           "email"  =>    "gilang1@gmail.com",
+           "password"=> bcrypt("12345678"),
+           "role"   =>   "anggota"
         ]);
+        // Petugas
+        User::create([
+           "username"   =>    "Gilangdos",
+           "email"  =>    "gilang2@gmail.com",
+           "password"=> bcrypt("12345678"),
+           "role"   =>   "petugas"
+        ]);
+        // kepala
+        User::create([
+           "username"   =>    "Gilangtrez",
+           "email"  =>    "gilang3@gmail.com",
+           "password"=> bcrypt("12345678"),
+           "role"   =>   "kepala_perpustakaan"
+        ]);
+
+    //   Kategori::create([
+    //      "nama_kategori"   =>   "Aksi"
+    //   ]);
+    //   Kategori::create([
+    //      "nama_kategori"   =>   "Fiksi"
+    //   ]);
+    //   Kategori::create([
+    //      "nama_kategori"   =>   "Tech"
+    //   ]);
+    //   Kategori::create([
+    //      "nama_kategori"   =>   "non-fiksi"
+    //   ]);
+    //   Kategori::create([
+    //      "nama_kategori"   =>   "Komik"   
+    //   ]);
+    //   Kategori::create([
+    //      "nama_kategori"   =>   "kartun"
+    //   ]);
     }
 }

@@ -29,9 +29,13 @@
             <div class="w-10 h-10 bg-white rounded-full shadow-inner flex items-center justify-center text-white">
                 <i data-lucide="user-round" class="w-5 h-5 text-[#004d4d]"></i>
             </div>
-            <div class="ml-1">
-                <p class="font-semibold text-md">Nama User</p>
-                <p class="font-light text-sm">Role User</p>
+            <div class="ml-1 min-w-0">
+                <p class="font-semibold text-md capitalize truncate">
+                    {{ Auth::user()->username ?? 'N/A' }}
+                </p>
+                <p class="font-light text-sm capitalize">
+                    {{ ucwords(str_replace('_', ' ', Auth::user()->role ?? 'N/A')) }}
+                </p>
             </div>
         </div>
 
@@ -64,7 +68,7 @@
                 <i data-lucide="user" class="w-5 h-5 opacity-70 group-hover:opacity-100"></i>
                 <span>Profil</span>
             </a>
-            <a href="#"  onclick="handleLogout()"
+            <a href="#" onclick="handleLogout()"
                 class="px-6 py-3 flex items-center gap-3 text-teal-100 hover:text-white transition-all duration-300 group">
                 <i data-lucide="log-out" class="w-5 h-5"></i>
                 <span>Logout</span>
@@ -89,7 +93,7 @@
             );
         }
     </script>
-    
+
 
 </body>
 

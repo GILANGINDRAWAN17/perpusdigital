@@ -6,30 +6,32 @@
     <title>Login Pustaka</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-    body {
-        font-family: 'Inter', sans-serif;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
 
-    .animated-bg {
-        background: linear-gradient(60deg, #002b2b, #045454, #006868, #001f1f);
-        background-size: 400% 400%;
-        animation: gradientMove 15s ease infinite;
-    }
+        .animated-bg {
+            background: linear-gradient(60deg, #002b2b, #045454, #006868, #001f1f);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+        }
 
-    @keyframes gradientMove {
-        0% {
-            background-position: 0% 50%;
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
-        50% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-        }
-    }
-</style>
+    </style>
 </head>
 
 <body class="min-h-screen flex items-center justify-center animated-bg">
@@ -58,7 +60,8 @@
             </p>
 
             <!-- Form -->
-            <form class="max-w-sm mx-auto">
+            <form id="authForm" action="/login" method="POST" class="max-w-sm mx-auto">
+                @csrf
 
                 <!-- EMAIL (REGISTER ONLY) -->
                 <div id="emailField" class="mb-4 hidden">
@@ -66,10 +69,10 @@
 
                     <div
                         class="flex items-center bg-white rounded-full px-4 py-3 text-black gap-4 shadow-lg border border-gray-200 focus-within:ring-2 focus-within:ring-[#00b39e] focus-within:border-[#00b39e] transition-all duration-300">
-                        
+
                         <i data-lucide="mail" class="text-[#004d4d]"></i>
-                       
-                        <input type="text" placeholder="Masukkan email anda..."
+
+                        <input type="text" name="email" placeholder="Masukkan email anda..."
                             class="w-full outline-none text-md placeholder-gray-400 bg-transparent">
                     </div>
                 </div>
@@ -83,7 +86,7 @@
 
                         <i data-lucide="user" class="text-[#004d4d]"></i>
 
-                        <input id="usernameInput" type="text" placeholder="Masukkan username anda..."
+                        <input id="usernameInput" name="username" type="text" placeholder="Masukkan username anda..."
                             class="w-full outline-none text-md placeholder-gray-400 bg-transparent">
                     </div>
                 </div>
@@ -97,14 +100,11 @@
 
                         <i data-lucide="key" class="text-[#004d4d]"></i>
 
-                        <input id="passwordInput" type="password" placeholder="Masukkan password anda..."
+                        <input id="passwordInput" name="password" type="password"
+                            placeholder="Masukkan password anda..."
                             class="w-full outline-none text-md placeholder-gray-400 bg-transparent">
-                            
-                    </div>
-                </div>
 
-                <div id="forgotPassword" class="text-right">
-                    <a href="#" class="text-xs font-medium hover:underline">Lupa Password?</a>
+                    </div>
                 </div>
 
                 <!-- Button -->
@@ -149,18 +149,30 @@
         let isRegister = false;
 
         function togglePanel() {
+            const form = document.getElementById("authForm");
+
+            if (!isRegister) {
+                form.action = "/register"; // pindah ke register
+            } else {
+                form.action = "/login"; // balik ke login
+            }
+
+
             const left = document.getElementById("leftPanel");
             const right = document.getElementById("rightPanel");
 
             const username = document.getElementById("usernameInput");
             const password = document.getElementById("passwordInput");
+            const emailInput = document.querySelector("input[name='email']");
 
             if (!isRegister) {
                 username.placeholder = "Buat username anda...";
                 password.placeholder = "Buat password anda...";
+                emailInput.setAttribute("required", true);
             } else {
                 username.placeholder = "Masukkan username anda...";
                 password.placeholder = "Masukkan password anda...";
+                emailInput.removeAttribute("required");
             }
 
             const title = document.getElementById("title");
@@ -171,16 +183,7 @@
             const rightTitle = document.getElementById("rightTitle");
             const rightDesc = document.getElementById("rightDesc");
 
-
-            const forgot = document.getElementById("forgotPassword");
-
-            if (!isRegister) {
-
-                forgot.classList.add("hidden");
-            } else {
-
-                forgot.classList.remove("hidden");
-            }
+            
 
             const switchBtn = document.getElementById("switchBtn");
 
@@ -189,7 +192,6 @@
             } else {
                 switchBtn.innerText = "Register";
             }
-
 
             // ANIMASI GESER
             left.classList.toggle("translate-x-full");
@@ -205,6 +207,7 @@
                 rightDesc.innerText = "Silahkan Login ke akun anda";
 
                 email.classList.remove("hidden");
+
             } else {
                 title.innerText = "Selamat Datang";
                 desc.innerText = "Silahkan login terlebih dahulu";
@@ -214,6 +217,9 @@
                 rightDesc.innerText = "Silahkan Registrasi akun terlebih dahulu";
 
                 email.classList.add("hidden");
+
+                // BONUS: clear email biar gak nyisa
+                emailInput.value = "";
             }
 
             isRegister = !isRegister;
