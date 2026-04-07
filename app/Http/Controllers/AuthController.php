@@ -88,9 +88,10 @@ class AuthController extends Controller
     // Fungsi Logout
     public function logout(Request $request)
     {
-        // Logout User
-        $request->session()->regenerateToken();
+        Auth::logout(); 
+
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/');
     }

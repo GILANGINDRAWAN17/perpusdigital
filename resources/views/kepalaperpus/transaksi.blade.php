@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pustaka Dashboard</title>
+    <title>Transaksi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-[#E2EDED] min-h-screen flex">
 
-    @include('layout.sidebarkepalaperpus')
+    @include('layout.sidebar')
 
     <main class="flex-1 p-8 overflow-y-auto">
-        
+
         <header class="flex justify-between items-start mb-8">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">Transaksi Buku</h1>
@@ -24,13 +29,63 @@
             </div>
             <div class="flex items-center gap-4">
                 <div class="relative bg-white p-2 rounded-full shadow-sm cursor-pointer border border-gray-100">
-                    <i data-lucide="bell" class="w-6 h-6 text-teal-500"></i>
-                    <span class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">3</span>
+                    <i data-lucide="bell" class="w-6 h-6 text-[#004d4d]"></i>
+                    <span
+                        class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">3</span>
                 </div>
             </div>
         </header>
 
-        
+        <div class="flex justify-between items-center mb-10">
+
+            <!-- KIRI -->
+            <div class="flex items-center gap-3 flex-1">
+                <button
+                    class="bg-white px-6 py-3.5 rounded-xl text-[#003d3d] font-semibold shadow-sm flex items-center gap-2 hover:brightness-105 transition">
+                    Konfirmasi Pengajuan <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </button>
+
+                 <button
+                    class="bg-white px-6 py-3.5 rounded-xl text-[#003d3d] font-semibold shadow-sm flex items-center gap-2 hover:brightness-105 transition">
+                    Semua <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </button>
+
+                <button
+                    class="bg-[#004d4d] px-8 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
+                    Terapkan
+                </button>
+            </div>
+
+            <!-- KANAN -->
+            <a href="{{ route('buku.create') }}"
+                class="bg-[#004d4d] text-white px-6 py-3.5 rounded-lg font-semibold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
+                Export PDF
+            </a>
+
+        </div>
+
+        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[500px]">
+
+            <div class="px-8 py-5 border-b border-gray-100">
+                <h3 class="font-semibold text-slate-700 text-md">Daftar Transaksi</h3>
+            </div>
+
+            <div class="flex-1 flex flex-col">
+                <div class="grid grid-cols-8 bg-[#004d4d] px-6 py-4 text-white text-sm font-semibold text-center">
+                    <div class="flex items-center justify-center">Kode Buku</div>
+                    <div class="flex items-center justify-center">NIK/NIS</div>
+                    <div class="flex items-center justify-center">Nama Peminjam</div>
+                    <div class="flex items-center justify-center">Tgl Pinjam</div>
+                    <div class="flex items-center justify-center">Jatuh Tempo</div>
+                    <div class="flex items-center justify-center">Petugas</div>
+                    <div class="flex items-center justify-center">Detail</div>
+                    <div class="flex items-center justify-center">Status</div>
+                </div>
+            </div>
+
+            <div class="h-8 bg-white border-t border-gray-50"></div>
+        </section>
+
     </main>
 
     <script>
@@ -38,4 +93,5 @@
         lucide.createIcons();
     </script>
 </body>
+
 </html>

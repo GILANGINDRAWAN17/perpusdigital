@@ -10,7 +10,7 @@
 
 <body class="bg-[#E2EDED] min-h-screen flex">
 
-    @include('layout.sidebarpetugas')
+    @include('layout.sidebar')
 
     <main class="flex-1 p-8 overflow-y-auto">
 
@@ -50,16 +50,18 @@
             </div>
 
             <!-- KANAN -->
-            <a href="{{ route('buku.create') }}"
-                class="bg-[#004d4d] text-white px-6 py-3.5 rounded-lg font-semibold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
-                + Tambah Buku
-            </a>
+            @if (Auth::user()->role === 'petugas')
+                <a href="{{ route('buku.create') }}"
+                    class="bg-[#004d4d] text-white px-6 py-3.5 rounded-lg font-semibold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
+                    + Tambah Buku
+                </a>
+            @endif
 
         </div>
 
 
 
-        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[500px]">
+        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[400px]">
 
             <!-- HEADER -->
             <div class="px-8 py-5 border-b border-gray-100">
@@ -105,25 +107,30 @@
 
                                 <td class="p-3 text-center space-x-2">
 
+                                    @if (Auth::user()->role === 'petugas')
+                                        <!-- EDIT -->
+                                        <a href="{{ route('buku.edit', $item->id) }}"
+                                            class="bg-yellow-400 text-white px-3 py-1 font-medium rounded border border-yellow-400 hover:bg-yellow-500 transition-all duration-300">
+                                            Edit
+                                        </a>
 
-                                    <!-- EDIT -->
-                                    <a href="{{ route('buku.edit', $item->id) }}"
-                                        class="bg-yellow-400 text-white px-3 py-1 font-medium rounded border border-yellow-400 hover:bg-yellow-500 transition-all duration-300">
-                                        Edit
-                                    </a>
-
-                                    <!-- DELETE -->
-                                    <form action="{{ route('buku.destroy', $item->id) }}" method="POST" class="inline"
-                                        onsubmit="return false">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" onclick="handleDelete(this, '{{ $item->judul_buku }}')"
-                                            class="bg-red-500 text-white px-3 py-1 font-medium rounded transition-all duration-300">
-                                            Hapus
-                                        </button>
-                                    </form>
+                                        <!-- DELETE -->
+                                        <form action="{{ route('buku.destroy', $item->id) }}" method="POST"
+                                            class="inline" onsubmit="return false">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button"
+                                                onclick="handleDelete(this, '{{ $item->judul_buku }}')"
+                                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 font-medium rounded transition-all duration-300">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    @else
+                                        <span class="text-gray-500 italic">Read Only</span>
+                                    @endif
 
                                 </td>
+
                             </tr>
 
                         @empty

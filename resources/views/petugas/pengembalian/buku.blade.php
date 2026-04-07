@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pustaka Dashboard</title>
+    <title>Pengembalian Buku</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -18,7 +18,7 @@
 
 <body class="bg-[#E2EDED] min-h-screen flex">
 
-    @include('layout.sidebarpetugas')
+    @include('layout.sidebar')
 
     <main class="flex-1 p-8 overflow-y-auto">
 

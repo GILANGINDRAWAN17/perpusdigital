@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pustaka Dashboard</title>
+    <title>Pinjaman Buku</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -18,7 +18,7 @@
 
 <body class="bg-[#E2EDED] min-h-screen flex">
 
-    @include('layout.sidebaranggota')
+    @include('layout.sidebar')
 
     <main class="flex-1 p-8 overflow-y-auto">
 
@@ -50,7 +50,7 @@
             </button>
 
             <button
-                class="bg-[#004d4d] px-10 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#00c9b3] transition">
+                class="bg-[#004d4d] px-10 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#003d3d] transition">
                 Cari
             </button>
         </div>
@@ -74,7 +74,7 @@
                 <div class="flex-1 flex flex-col items-center justify-center p-20">
                     <p class="text-slate-500 text-center font-medium">
                         Anda belum memiliki riwayat peminjaman buku. <br>
-                        <a href="katalog" class="text-[#004d4d] underline hover:text-[#00c9b3]">(Pinjam dari
+                        <a href="katalog" class="text-[#004d4d] underline hover:text-[#003d3d]">(Pinjam dari
                             katalog)</a>
                     </p>
                 </div>

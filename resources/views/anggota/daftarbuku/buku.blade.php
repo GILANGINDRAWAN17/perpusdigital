@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pustaka Dashboard</title>
+    <title>Daftar Buku</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -18,7 +18,7 @@
 
 <body class="bg-[#E2EDED] min-h-screen flex">
 
-    @include('layout.sidebaranggota')
+    @include('layout.sidebar')
 
     <main class="flex-1 p-8 overflow-y-auto">
 
@@ -42,11 +42,11 @@
                 <input type="text" placeholder="Cari buku..."
                     class="w-full pl-12 pr-4 py-3.5 rounded-xl border-none focus:ring-2 focus:ring-[#004d4d] outline-none">
             </div>
-            <button class="bg-[#004d4d] p-3.5 rounded-xl text-white shadow-sm hover:brightness-105 transition">
+            <button class="bg-[#004d4d] p-3.5 rounded-xl text-white shadow-sm hover:bg-[#003d3d] transition-all duration-300">
                 <i data-lucide="list-filter" class="w-6 h-6"></i>
             </button>
             <button
-                class="bg-[#004d4d] px-10 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#00c9b3] transition">
+                class="bg-[#004d4d] px-10 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
                 Cari
             </button>
         </div>
@@ -86,7 +86,7 @@
                                     class="text-teal-500 not-italic font-bold ml-1">Tersedia</span></p>
                         </div>
                         <button
-                            class="bg-[#004d4d] text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 hover:bg-[#00c9b3] shadow-md shadow-[#004d4d]/20 transition-colors">
+                            class="bg-[#004d4d] text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 hover:bg-[#003d3d] shadow-md shadow-[#004d4d]/20 transition-all duration-300">
                             Pinjam
                         </button>
                     </div>
@@ -109,12 +109,54 @@
                                     class="text-teal-500 not-italic font-bold ml-1">Tersedia</span></p>
                         </div>
                         <button
-                            class="bg-[#004d4d] text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 hover:bg-[#00c9b3] shadow-md shadow-[#004d4d]/20 transition-colors">Pinjam</button>
+                            class="bg-[#004d4d] text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 hover:bg-[#003d3d] shadow-md shadow-[#004d4d]/20 transition-all duration-300">Pinjam</button>
                     </div>
                 </div>
 
+                 <div
+                    class="bg-white border border-slate-50 p-5 rounded-2xl shadow-md hover:shadow-xl transition-all flex gap-5 group">
+                    <div
+                        class="w-32 h-44 bg-slate-200 rounded-xl flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="flex flex-col justify-between flex-1 text-sm">
+                        <div class="space-y-2">
+                            <p class="text-slate-400 font-medium italic">Judul : <span
+                                    class="text-slate-700 not-italic font-semibold ml-1">Judul Buku</span></p>
+                            <p class="text-slate-400 font-medium italic">Penulis : <span
+                                    class="text-slate-700 not-italic font-semibold ml-1">Nama Penulis</span></p>
+                            <p class="text-slate-400 font-medium italic">Tahun : <span
+                                    class="text-slate-700 not-italic font-semibold ml-1">2026</span></p>
+                            <p class="text-slate-400 font-medium italic">Status : <span
+                                    class="text-teal-500 not-italic font-bold ml-1">Tersedia</span></p>
+                        </div>
+                        <button
+                            class="bg-[#004d4d] text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 hover:bg-[#003d3d] shadow-md shadow-[#004d4d]/20 transition-all duration-300">Pinjam</button>
+                    </div>
+                </div>
+
+                 <div
+                    class="bg-white border border-slate-50 p-5 rounded-2xl shadow-md hover:shadow-xl transition-all flex gap-5 group">
+                    <div
+                        class="w-32 h-44 bg-slate-200 rounded-xl flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="flex flex-col justify-between flex-1 text-sm">
+                        <div class="space-y-2">
+                            <p class="text-slate-400 font-medium italic">Judul : <span
+                                    class="text-slate-700 not-italic font-semibold ml-1">Judul Buku</span></p>
+                            <p class="text-slate-400 font-medium italic">Penulis : <span
+                                    class="text-slate-700 not-italic font-semibold ml-1">Nama Penulis</span></p>
+                            <p class="text-slate-400 font-medium italic">Tahun : <span
+                                    class="text-slate-700 not-italic font-semibold ml-1">2026</span></p>
+                            <p class="text-slate-400 font-medium italic">Status : <span
+                                    class="text-teal-500 not-italic font-bold ml-1">Tersedia</span></p>
+                        </div>
+                        <button
+                            class="bg-[#004d4d] text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 hover:bg-[#003d3d] shadow-md shadow-[#004d4d]/20 transition-all duration-300">Pinjam</button>
+                    </div>
+                </div>
             </div>
         </section>
+        
     </main>
 
     <script>

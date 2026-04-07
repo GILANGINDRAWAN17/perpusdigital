@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pustaka Dashboard</title>
+    <title>Dashboard Kepala Perpustakaan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -18,13 +18,13 @@
 
 <body class="bg-[#E2EDED] min-h-screen flex">
 
-    @include('layout.sidebarkepalaperpus')
+    @include('layout.sidebar')
 
     <main class="flex-1 p-8 overflow-y-auto">
 
         <header class="flex justify-between items-start mb-8">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">Selamat Datang, Username!</h1>
+                <h1 class="text-2xl font-bold text-gray-800"><span class="font-light">Selamat Datang,</span> {{ Auth::user()->username ?? 'N/A' }}</h1>
                 <p class="text-gray-500 text-sm mt-1">Berikut ringkasan aktivitas perpustakaan</p>
             </div>
             <div class="flex items-center gap-4">

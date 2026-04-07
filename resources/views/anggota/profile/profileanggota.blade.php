@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pustaka Dashboard</title>
+    <title>Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -18,7 +18,7 @@
 
 <body class="bg-[#E2EDED] min-h-screen flex">
 
-    @include('layout.sidebaranggota')
+    @include('layout.sidebar')
 
     <main class="flex-1 p-8 overflow-y-auto">
 
@@ -42,8 +42,8 @@
                 <i data-lucide="user-round" class="w-20 h-20 opacity-80"></i>
             </div>
             <div>
-                <h3 class="text-2xl font-bold text-slate-800">Username</h3>
-                <p class="text-slate-500">email@gmail.com</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ Auth::user()->username ?? 'N/A' }}</h3>
+                <p class="text-slate-500">{{ Auth::user()->email ?? 'N/A' }}</p>
                 <div class="flex gap-2 mt-4">
                     <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Aktif</span>
                     <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Anggota</span>
