@@ -45,9 +45,13 @@
                 <h3 class="text-2xl font-bold text-slate-800">{{ Auth::user()->username ?? 'N/A' }}</h3>
                 <p class="text-slate-500">{{ Auth::user()->email ?? 'N/A' }}</p>
                 <div class="flex gap-2 mt-4">
-                    <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Aktif</span>
-                    <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">Kepala
-                        Perpustakaan</span>
+                    <span class="bg-green-500 text-white text-[10px] px-3 py-1 rounded-full font-bold">
+                        {{ Auth::user()->status ?? 'Aktif' }}
+                    </span>
+
+                    <span class="bg-[#004d4d] text-white text-[10px] px-3 py-1 rounded-full font-bold">
+                        {{ ucfirst(str_replace('_', ' ', Auth::user()->role)) }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -61,22 +65,23 @@
                 <div class="flex">
                     <p class="w-40 text-slate-600 font-medium">Nama Lengkap</p>
                     <p class="mr-4 text-slate-400">:</p>
-                    <p class="text-slate-400 italic">Belum dilengkapi</p>
+                    <p class="text-slate-700">
+                        {{ Auth::user()->nama_lengkap ?? 'Belum dilengkapi' }}
+                    </p>
                 </div>
                 <div class="flex">
-                    <p class="w-40 text-slate-600 font-medium">No Hp</p>
+                    <p class="w-40 text-slate-600 font-medium">NIK/NIS</p>
                     <p class="mr-4 text-slate-400">:</p>
-                    <p class="text-slate-400 italic">Belum dilengkapi</p>
+                    <p class="text-slate-700">
+                        {{ Auth::user()->nik_nis ?? 'Belum dilengkapi' }}
+                    </p>
                 </div>
                 <div class="flex">
-                    <p class="w-40 text-slate-600 font-medium">Jenis Kelamin</p>
+                    <p class="w-40 text-slate-600 font-medium">No Telp</p>
                     <p class="mr-4 text-slate-400">:</p>
-                    <p class="text-slate-400 italic">Belum dilengkapi</p>
-                </div>
-                <div class="flex border-none">
-                    <p class="w-40 text-slate-600 font-medium">Email</p>
-                    <p class="mr-4 text-slate-400">:</p>
-                    <p class="text-slate-400 italic">Belum dilengkapi</p>
+                    <p class="text-slate-700">
+                        {{ Auth::user()->no_telp ?? 'Belum dilengkapi' }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -93,7 +98,7 @@
             </button>
         </div>
     </main>
-    
+
     <script>
         lucide.createIcons();
     </script>

@@ -28,10 +28,35 @@
                 <p class="text-gray-500 text-sm mt-1">Kelola Akun Anda</p>
             </div>
             <div class="flex items-center gap-4">
-                <div class="relative bg-white p-2 rounded-full shadow-sm cursor-pointer border border-gray-100">
-                    <i data-lucide="bell" class="w-6 h-6 text-[#004d4d]"></i>
-                    <span
-                        class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">3</span>
+                <div x-data="{ open: false }" class="relative">
+
+                    <!-- ICON -->
+                    <div @click="open = !open"
+                        class="bg-white p-2 rounded-full shadow-sm cursor-pointer border border-gray-100 relative">
+
+                        <i data-lucide="bell" class="w-6 h-6 text-[#004d4d]"></i>
+
+                        <!-- BADGE -->
+                        <span id="notif-badge"
+                            class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 items-center justify-center rounded-full border-2 border-white hidden">
+                        </span>
+                    </div>
+
+                    <!-- DROPDOWN -->
+                    <div x-show="open" @click.outside="open = false"
+                        class="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-lg border z-[999] overflow-hidden">
+
+                        <div class="p-4 border-b font-semibold text-[#002d2d]">
+                            Notifikasi
+                        </div>
+
+                        <div id="notif-list" class="max-h-80 overflow-y-auto"></div>
+
+                        <div class="p-3 text-center text-sm text-[#003d3d] hover:bg-gray-50 cursor-pointer">
+                            Lihat semua
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </header>
@@ -94,7 +119,9 @@
             </button>
         </div>
     </main>
-    
+
+    @include('layout.notifikasi')
+
     <script>
         lucide.createIcons();
     </script>

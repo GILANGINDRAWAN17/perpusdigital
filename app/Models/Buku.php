@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Buku extends Model
 {
     protected $table = 'buku';
-    protected $guarded = []; 
-    
+    protected $guarded = [];
+
+    public function peminjaman()
+    {
+        return $this->hasMany(Peminjaman::class);
+    }
 }

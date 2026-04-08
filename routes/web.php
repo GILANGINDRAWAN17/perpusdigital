@@ -26,19 +26,45 @@ Route::get('/dashboard', function () {
     return view('anggota.dashboard');
 })->middleware(anggota::class);
 
-Route::get('/katalog', function () {
-    return view('anggota.daftarbuku.buku');
-})->middleware(anggota::class);
+Route::get('/katalog', [
+    BukuController::class,
+    'katalog'
+])->middleware(anggota::class);
 
-Route::get('/riwayat', function () {
-    return view('anggota.riwayat.pinjaman');
-})->middleware(anggota::class);
+Route::post('/pinjam/{id}', [BukuController::class, 'pinjam'])
+    ->middleware(anggota::class)
+    ->name('pinjam.buku');
+
+Route::post('/kembalikan/{id}', [BukuController::class, 'kembalikan'])
+    ->middleware(anggota::class)
+    ->name('kembalikan.buku');
+
+Route::get('/riwayat', [BukuController::class, 'riwayat'])
+    ->middleware(anggota::class)
+    ->name('riwayat');
 
 Route::get('/profile', function () {
     return view('anggota.profile.profileanggota');
 })->middleware(anggota::class);
 
+Route::post('/notifikasi/{id}/read', function ($id) {
+    $notif = \App\Models\Notifikasi::findOrFail($id);
 
+    if ($notif->user_id != auth()->id()) {
+        abort(403);
+    }
+
+    $notif->update(['is_read' => true]);
+
+    return response()->json(['success' => true]);
+})->name('notifikasi.read');
+
+Route::get('/notifikasi/data', function () {
+    return \App\Models\Notifikasi::where('user_id', auth()->id())
+        ->latest()
+        ->take(5)
+        ->get();
+})->middleware('auth');
 
 //KEPALA PERPUSTAKAAN
 Route::get('/dashboardkepalaperpus', function () {
@@ -70,13 +96,26 @@ Route::get('/dashboardpetugas', function () {
     return view('petugas.dashboard');
 })->middleware(petugas::class);
 
-Route::get('/peminjaman', function () {
-    return view('petugas.peminjaman.buku');
-})->middleware(petugas::class);
+// Approve peminjaman
+Route::post('/peminjaman/{id}/approve', [BukuController::class, 'approve'])
+    ->middleware(petugas::class)
+    ->name('peminjaman.approve');
 
-Route::get('/pengembalian', function () {
-    return view('petugas.pengembalian.buku');
-})->middleware(petugas::class);
+// Tolak peminjaman
+Route::post('/peminjaman/{id}/tolak', [BukuController::class, 'tolak'])
+    ->middleware(petugas::class)
+    ->name('peminjaman.tolak');
+
+// Konfirmasi pengembalian
+Route::post('/pengembalian/{id}/confirm', [BukuController::class, 'confirmKembali'])
+    ->middleware(petugas::class)
+    ->name('pengembalian.confirm');
+
+Route::get('/peminjaman', [BukuController::class, 'peminjaman'])
+    ->middleware(petugas::class);
+
+Route::get('/pengembalian', [BukuController::class, 'pengembalian'])
+    ->middleware(petugas::class);
 
 Route::get('/profilepetugas', function () {
     return view('petugas.profile.profilepetugas');

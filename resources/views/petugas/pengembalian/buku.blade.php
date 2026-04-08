@@ -68,7 +68,7 @@
                     <div>Pinjam</div>
                     <div>Kembali</div>
                     <div>Status</div>
-                    <div>Denda</div>
+                    <div>Aksi</div>
                 </div>
 
                

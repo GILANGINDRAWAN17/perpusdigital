@@ -45,7 +45,7 @@
                     Konfirmasi Pengajuan <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </button>
 
-                 <button
+                <button
                     class="bg-white px-6 py-3.5 rounded-xl text-[#003d3d] font-semibold shadow-sm flex items-center gap-2 hover:brightness-105 transition">
                     Semua <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </button>
@@ -64,22 +64,23 @@
 
         </div>
 
-        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[500px]">
+        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[300px]">
 
             <div class="px-8 py-5 border-b border-gray-100">
                 <h3 class="font-semibold text-slate-700 text-md">Daftar Transaksi</h3>
             </div>
 
-            <div class="flex-1 flex flex-col">
-                <div class="grid grid-cols-8 bg-[#004d4d] px-6 py-4 text-white text-sm font-semibold text-center">
-                    <div class="flex items-center justify-center">Kode Buku</div>
-                    <div class="flex items-center justify-center">NIK/NIS</div>
-                    <div class="flex items-center justify-center">Nama Peminjam</div>
-                    <div class="flex items-center justify-center">Tgl Pinjam</div>
-                    <div class="flex items-center justify-center">Jatuh Tempo</div>
-                    <div class="flex items-center justify-center">Petugas</div>
-                    <div class="flex items-center justify-center">Detail</div>
-                    <div class="flex items-center justify-center">Status</div>
+            <div class="flex-1 flex flex-col overflow-x-auto scroll-">
+                <div
+                    class="grid grid-cols-[60px_120px_2fr_1.5fr_1.5fr_1.5fr_1fr_1fr] w-full items-center py-3 px-6 bg-[#004d4d] font-bold text-sm text-center text-white">
+                    <div>Kode</div>
+                    <div>NIK/NIS</div>
+                    <div class="truncate px-2">Nama Peminjam</div>
+                    <div>Tgl Pinjam</div>
+                    <div>Jatuh Tempo</div>
+                    <div>Petugas</div>
+                    <div>Detail</div>
+                    <div>Status</div>
                 </div>
             </div>
 

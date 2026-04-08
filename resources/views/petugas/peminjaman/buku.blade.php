@@ -68,14 +68,73 @@
                     <div>Pinjam</div>
                     <div>Kembali</div>
                     <div>Status</div>
-                    <div>Denda</div>
+                    <div>Aksi</div>
                 </div>
+
+                @if ($data->count())
+                    @foreach ($data as $item)
+                        <div class="grid grid-cols-6 items-center px-8 py-4 border-b text-center text-sm">
+
+                            {{-- COVER --}}
+                            <div class="flex justify-center">
+                                <img src="{{ asset('storage/' . $item->buku->cover_image) }}"
+                                    class="w-12 h-16 object-cover rounded">
+                            </div>
+
+                            {{-- JUDUL --}}
+                            <div>{{ $item->buku->judul_buku }}</div>
+
+                            {{-- PINJAM --}}
+                            <div>{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}</div>
+
+                            {{-- KEMBALI --}}
+                            <div>{{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}</div>
+
+                            {{-- STATUS --}}
+                            <div>
+                                @if ($item->status == 'pending')
+                                    <span class="text-yellow-500 font-semibold">Pending</span>
+                                @elseif ($item->status == 'dipinjam')
+                                    <span class="text-green-500 font-semibold">Dipinjam</span>
+                                @endif
+                            </div>
+
+                            {{-- AKSI --}}
+                            <div class="flex gap-2 justify-center">
+
+                                @if ($item->status == 'pending')
+                                    <form action="{{ route('peminjaman.approve', $item->id) }}" method="POST">
+                                        @csrf
+                                        <button class="bg-[#004d4d] hover:bg-[#003d3d] text-white px-3 py-2 font-medium transition-all duration-300 rounded text-sm">
+                                            Approve
+                                        </button>
+                                    </form>
+
+                                    <form action="{{ route('peminjaman.tolak', $item->id) }}" method="POST">
+                                        @csrf
+                                        <button class="bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 px-3 py-2 rounded text-sm">
+                                            Tolak
+                                        </button>
+                                    </form>
+                                @else
+                                    <span>-</span>
+                                @endif
+
+                            </div>
+
+                        </div>
+                    @endforeach
+                @else
+                    <div class="flex-1 flex items-center justify-center p-20">
+                        <p class="text-gray-500">Belum ada data peminjaman</p>
+                    </div>
+                @endif
             </div>
 
-            <div class="h-8 bg-white border-t border-gray-50"></div>
+
         </section>
 
-        
+
     </main>
 
     <script>
