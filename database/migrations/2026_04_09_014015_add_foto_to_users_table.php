@@ -9,10 +9,10 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('notifikasis', function (Blueprint $table) {
-            $table->boolean('is_read')->default(false);
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('foto')->nullable()->after('nik_nis');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('notifikasis', function (Blueprint $table) {
-            //
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('foto');
         });
     }
 };

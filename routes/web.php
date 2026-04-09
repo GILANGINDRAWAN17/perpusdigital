@@ -8,6 +8,7 @@ use App\Http\Middleware\kepalaperpustakaan;
 use App\Http\Middleware\petugas;
 use App\Http\Middleware\petugasdankepala;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 
 Route::get('/', function () {
@@ -20,6 +21,8 @@ Route::get('/login', [AuthController::class, 'indexLogin']);
 Route::post('/login', [AuthController::class, 'masuk']);
 
 Route::post('/register', [AuthController::class, 'daftar']);
+
+
 
 //ANGGOTA
 Route::get('/dashboard', function () {
@@ -47,6 +50,17 @@ Route::get('/profile', function () {
     return view('anggota.profile.profileanggota');
 })->middleware(anggota::class);
 
+Route::post('/profile/foto', [ProfileController::class, 'updateFoto'])
+    ->name('profile.foto');
+
+Route::put('/profile/update', [ProfileController::class, 'update'])
+    ->middleware(anggota::class)
+    ->name('profile.update');
+
+Route::post('/profile/password', [ProfileController::class, 'updatePassword'])
+    ->middleware(anggota::class)
+    ->name('password.update');
+
 Route::post('/notifikasi/{id}/read', function ($id) {
     $notif = \App\Models\Notifikasi::findOrFail($id);
 
@@ -65,6 +79,8 @@ Route::get('/notifikasi/data', function () {
         ->take(5)
         ->get();
 })->middleware('auth');
+
+
 
 //KEPALA PERPUSTAKAAN
 Route::get('/dashboardkepalaperpus', function () {
@@ -116,6 +132,9 @@ Route::get('/peminjaman', [BukuController::class, 'peminjaman'])
 
 Route::get('/pengembalian', [BukuController::class, 'pengembalian'])
     ->middleware(petugas::class);
+
+Route::post('/confirm-kembali/{id}', [BukuController::class, 'confirmKembali'])
+    ->name('confirm.kembali');
 
 Route::get('/profilepetugas', function () {
     return view('petugas.profile.profilepetugas');

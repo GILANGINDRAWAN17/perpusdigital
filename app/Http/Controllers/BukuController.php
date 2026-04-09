@@ -163,7 +163,11 @@ class BukuController extends Controller
                 $item->status == 'dipinjam' &&
                 now()->gt($item->tanggal_jatuh_tempo)
             ) {
-                $telat = now()->diffInDays($item->tanggal_jatuh_tempo);
+                $telat = $item->tanggal_jatuh_tempo
+                    ->copy()
+                    ->startOfDay()
+                    ->diffInDays(now()->startOfDay());
+                    
                 $denda = $telat * 1000;
 
                 $item->update([
@@ -215,7 +219,11 @@ class BukuController extends Controller
                 $item->status == 'dipinjam' &&
                 now()->gt($item->tanggal_jatuh_tempo)
             ) {
-                $telat = now()->diffInDays($item->tanggal_jatuh_tempo);
+                $telat = $item->tanggal_jatuh_tempo
+                    ->copy()
+                    ->startOfDay()
+                    ->diffInDays(now()->startOfDay());
+
                 $denda = $telat * 1000;
 
                 $item->update([
@@ -235,30 +243,15 @@ class BukuController extends Controller
             ->latest()
             ->get();
 
-        // AUTO UPDATE TERLAMBAT
-        foreach ($data as $item) {
-            if (
-                $item->status == 'dipinjam' &&
-                now()->gt($item->tanggal_jatuh_tempo)
-            ) {
-                $telat = now()->diffInDays($item->tanggal_jatuh_tempo);
-                $denda = $telat * 1000;
-
-                $item->update([
-                    'status' => 'terlambat',
-                    'denda' => $denda
-                ]);
-            }
-        }
-
         return view('petugas.pengembalian.buku', compact('data'));
     }
+
     // Kembalikan 
     public function kembalikan($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
 
-        if ($peminjaman->status == 'dipinjam') {
+        if (in_array($peminjaman->status, ['dipinjam', 'terlambat'])) {
             $peminjaman->update([
                 'status' => 'menunggu_kembali'
             ]);
@@ -313,16 +306,22 @@ class BukuController extends Controller
 
         if ($peminjaman->status == 'menunggu_kembali') {
 
+            $tanggalKembali = now();
             $denda = 0;
 
-            if (now()->gt($peminjaman->tanggal_jatuh_tempo)) {
-                $telat = now()->diffInDays($peminjaman->tanggal_jatuh_tempo);
+            if (now()->greaterThan($peminjaman->tanggal_jatuh_tempo)) {
+
+                $jatuhTempo = $peminjaman->tanggal_jatuh_tempo->copy()->startOfDay();
+                $sekarang = now()->startOfDay();
+
+                $telat = max(0, $jatuhTempo->diffInDays($sekarang));
+
                 $denda = $telat * 1000;
             }
 
             $peminjaman->update([
                 'status' => 'selesai',
-                'tanggal_kembali' => now(),
+                'tanggal_kembali' => $tanggalKembali,
                 'denda' => $denda
             ]);
 

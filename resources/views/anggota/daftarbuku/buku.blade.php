@@ -99,14 +99,14 @@
                         <div class="flex flex-col justify-between flex-1">
                             <div class="space-y-2 text-sm">
 
-                                <p class="text-slate-400 font-medium">
+                                <p class="text-slate-400 truncate font-medium">
                                     Judul :
                                     <span class="text-slate-700 font-semibold ml-1">
                                         {{ $item->judul_buku }}
                                     </span>
                                 </p>
 
-                                <p class="text-slate-400 font-medium">
+                                <p class="text-slate-400 truncate font-medium">
                                     Penulis :
                                     <span class="text-slate-700 font-semibold ml-1">
                                         {{ $item->penulis }}

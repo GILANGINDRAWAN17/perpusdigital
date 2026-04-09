@@ -2,7 +2,7 @@
 <div id="globalModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-[999]">
 
     <div id="modalBox"
-        class="bg-white rounded-[2rem] shadow-2xl w-full max-w-md p-12 flex flex-col items-center scale-90 opacity-0 transition-all duration-300 ease-out">
+        class="bg-white rounded-[2rem] shadow-2xl w-full max-w-md p-8 flex flex-col items-center scale-90 opacity-0 transition-all duration-300 ease-out">
 
         <h2 id="modalTitle" class="text-2xl font-bold mb-4 text-[#001d1d]">
             Konfirmasi

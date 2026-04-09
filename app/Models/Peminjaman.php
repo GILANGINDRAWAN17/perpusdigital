@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Peminjaman extends Model
 {
     protected $table = 'peminjaman';
-    
+
     protected $fillable = [
         'user_id',
         'buku_id',
@@ -16,6 +16,12 @@ class Peminjaman extends Model
         'tanggal_kembali',
         'status',
         'denda'
+    ];
+
+    protected $casts = [
+        'tanggal_pinjam' => 'datetime',
+        'tanggal_jatuh_tempo' => 'datetime',
+        'tanggal_kembali' => 'datetime',
     ];
 
     public function user()

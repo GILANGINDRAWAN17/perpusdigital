@@ -27,13 +27,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Pengembalian Buku</h1>
                 <p class="text-gray-500 text-sm mt-1">Kelola Pengembalian Buku</p>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="relative bg-white p-2 rounded-full shadow-sm cursor-pointer border border-gray-100">
-                    <i data-lucide="bell" class="w-6 h-6 text-[#004d4d]"></i>
-                    <span
-                        class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">3</span>
-                </div>
-            </div>
+
         </header>
 
 
@@ -70,14 +64,61 @@
                     <div>Status</div>
                     <div>Aksi</div>
                 </div>
+                <div class="flex-1 flex flex-col items-center">
+                    @if ($data->count())
+                        @foreach ($data as $item)
+                            <div class="grid grid-cols-6 items-center px-8 py-4 border-b text-center text-sm">
 
-               
+                                {{-- COVER --}}
+                                <div class="flex justify-center">
+                                    <img src="{{ asset('storage/' . $item->buku->cover_image) }}"
+                                        class="w-12 h-16 object-cover rounded">
+                                </div>
+
+                                {{-- JUDUL --}}
+                                <div>{{ $item->buku->judul_buku }}</div>
+
+                                {{-- PINJAM --}}
+                                <div>{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}</div>
+
+                                {{-- KEMBALI --}}
+                                <div>{{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}</div>
+
+                                {{-- STATUS --}}
+                                <div>
+                                    @if ($item->status == 'menunggu_kembali')
+                                        <span class="text-blue-500 font-semibold">Menunggu Konfirmasi</span>
+                                    @elseif ($item->status == 'terlambat')
+                                        <span class="text-red-500 font-semibold">Terlambat</span>
+                                    @endif
+                                </div>
+
+                                {{-- AKSI --}}
+                                <div>
+                                    <form action="{{ route('confirm.kembali', $item->id) }}" method="POST">
+                                        @csrf
+                                        <button
+                                            class="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded text-sm font-medium transition">
+                                            Konfirmasi
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="flex-1 flex items-center justify-center p-20">
+                            <p class="text-gray-500">Belum ada pengembalian buku</p>
+                        </div>
+                    @endif
+                </div>
+
             </div>
 
             <div class="h-8 bg-white border-t border-gray-50"></div>
         </section>
 
-        
+
     </main>
 
     <script>
@@ -85,7 +126,7 @@
         lucide.createIcons();
     </script>
 
-   
+
 </body>
 
 </html>

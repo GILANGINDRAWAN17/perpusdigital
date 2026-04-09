@@ -22,12 +22,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Buku</h1>
                 <p class="text-gray-500 text-sm mt-1">Berikut daftar buku perpustakaan</p>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="relative bg-white p-2 rounded-full shadow-sm cursor-pointer border border-gray-100">
-                    <i data-lucide="bell" class="w-6 h-6 text-[#004d4d]"></i>
-                    <span class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">3</span>
-                </div>
-            </div>
+          
         </header>
 
     </main>

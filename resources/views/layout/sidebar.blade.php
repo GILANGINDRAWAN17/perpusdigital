@@ -21,7 +21,16 @@
     {{-- PROFILE --}}
     <div class="bg-[#003d3d] scale-90 border border-[#027676] px-4 py-3 flex rounded-lg items-center gap-3 shadow-2xl">
         <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-            <i data-lucide="user-round" class="w-5 h-5 text-[#004d4d]"></i>
+            <img id="previewImage" src="{{ Auth::user()->foto ? asset('storage/' . Auth::user()->foto) : '' }}"
+                class="w-10 h-10 rounded-full object-cover shadow-lg border border-[#003d3d]
+                     {{ Auth::user()->foto ? '' : 'hidden' }}">
+
+            <!-- DEFAULT ICON -->
+            <div id="defaultIcon"
+                class="w-10 h-10 bg-[#004d4d] rounded-full border border-[#003d3d] shadow-lg flex items-center justify-center text-white
+                     {{ Auth::user()->foto ? 'hidden' : '' }}">
+                <i data-lucide="user-round" class="w-20 h-20 opacity-80"></i>
+            </div>
         </div>
         <div class="ml-1 min-w-0">
             <p class="font-semibold text-md capitalize truncate">

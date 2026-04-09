@@ -19,13 +19,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Daftar Buku Perpustakaan</h1>
                 <p class="text-gray-500 text-sm mt-1">Kelola Buku Perpustakaan</p>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="relative bg-white p-2 rounded-full shadow-sm cursor-pointer border border-gray-100">
-                    <i data-lucide="bell" class="w-6 h-6 text-[#004d4d]"></i>
-                    <span
-                        class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">3</span>
-                </div>
-            </div>
+
         </header>
 
         <div class="flex justify-between items-center mb-10">
@@ -100,8 +94,8 @@
                                     @endif
                                 </td>
 
-                                <td class="p-3 font-semibold">{{ $item->judul_buku }}</td>
-                                <td class="p-3">{{ $item->penulis }}</td>
+                                <td class="p-3 font-semibold max-w-[200px] truncate">{{ $item->judul_buku }}</td>
+                                <td class="p-3 max-w-[150px] truncate">{{ $item->penulis }}</td>
                                 <td class="p-3">{{ \Carbon\Carbon::parse($item->tahun_terbit)->format('Y') }}</td>
                                 <td class="p-3">{{ $item->stock_buku }}</td>
 
@@ -109,22 +103,24 @@
 
                                     @if (Auth::user()->role === 'petugas')
                                         <!-- EDIT -->
-                                        <a href="{{ route('buku.edit', $item->id) }}"
-                                            class="bg-yellow-400 text-white px-3 py-1 font-medium rounded border border-yellow-400 hover:bg-yellow-500 transition-all duration-300">
-                                            Edit
-                                        </a>
+                                        <div class="flex justify-center gap-2 flex-nowrap">
+                                            <a href="{{ route('buku.edit', $item->id) }}"
+                                                class="bg-yellow-400 text-white whitespace-nowrap px-3 py-1 font-medium rounded border border-yellow-400 hover:bg-yellow-500 transition-all duration-300">
+                                                Edit
+                                            </a>
 
-                                        <!-- DELETE -->
-                                        <form action="{{ route('buku.destroy', $item->id) }}" method="POST"
-                                            class="inline" onsubmit="return false">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button"
-                                                onclick="handleDelete(this, '{{ $item->judul_buku }}')"
-                                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 font-medium rounded transition-all duration-300">
-                                                Hapus
-                                            </button>
-                                        </form>
+                                            <!-- DELETE -->
+                                            <form action="{{ route('buku.destroy', $item->id) }}" method="POST"
+                                                class="inline" onsubmit="return false">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button"
+                                                    onclick="handleDelete(this, '{{ $item->judul_buku }}')"
+                                                    class="bg-red-500 hover:bg-red-600 whitespace-nowrap text-white px-3 py-1 font-medium rounded transition-all duration-300">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
                                     @else
                                         <span class="text-gray-500 italic">Read Only</span>
                                     @endif

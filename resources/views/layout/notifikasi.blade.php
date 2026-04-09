@@ -27,13 +27,13 @@
                     let icon = 'bell';
                     let color = 'text-blue-500';
 
-                    if (notif.pesan.includes('disetujui')) {
+                    if (notif.pesan.includes('Disetujui')) {
                         icon = 'check-circle';
                         color = 'text-green-500';
-                    } else if (notif.pesan.includes('ditolak')) {
+                    } else if (notif.pesan.includes('Ditolak')) {
                         icon = 'x-circle';
                         color = 'text-red-500';
-                    } else if (notif.pesan.includes('jatuh tempo')) {
+                    } else if (notif.pesan.includes('Jatuh tempo')) {
                         icon = 'clock';
                         color = 'text-yellow-500';
                     }
@@ -65,7 +65,7 @@
                 }
 
                 document.getElementById('notif-list').innerHTML = html;
-                document.getElementById('notif-badge').innerText = unread;
+                const badge = document.getElementById('notif-badge');
 
                 if (unread === 0) {
                     badge.classList.add('hidden');
@@ -93,11 +93,11 @@
             });
     }
 
-    // 🔥 LOAD AWAL
+    // LOAD AWAL
     document.addEventListener('DOMContentLoaded', () => {
         loadNotifikasi();
 
-        // 🔥 AUTO REFRESH
+        // AUTO REFRESH
         setInterval(loadNotifikasi, 5000);
     });
 </script>

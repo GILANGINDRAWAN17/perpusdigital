@@ -80,14 +80,14 @@
             </button>
         </div>
 
-        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[500px]">
+        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[300px]">
 
             <div class="px-8 py-5 border-b border-gray-100">
                 <h3 class="font-semibold text-slate-700 text-md">Dipinjam</h3>
             </div>
 
             <div class="flex-1 flex flex-col">
-                <div class="grid grid-cols-6 bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
+                <div class="grid grid-cols-[80px_1fr_120px_120px_120px_120px] bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
                     <div>Cover</div>
                     <div>Judul</div>
                     <div>Pinjam</div>
@@ -103,7 +103,7 @@
 
                     @if ($dipinjam->count())
                         @foreach ($dipinjam as $item)
-                            <div class="grid grid-cols-6 items-center px-8 py-4 border-b text-center text-sm">
+                            <div class="grid grid-cols-[80px_1fr_120px_120px_120px_120px] items-center px-8 py-4 border-b text-sm w-full">
 
                                 {{-- COVER --}}
                                 <div class="flex justify-center">
@@ -112,16 +112,16 @@
                                 </div>
 
                                 {{-- JUDUL --}}
-                                <div>{{ $item->buku->judul_buku }}</div>
+                                <div class="truncate flex justify-center">{{ $item->buku->judul_buku }}</div>
 
                                 {{-- PINJAM --}}
-                                <div>{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}</div>
+                                <div class="truncate flex justify-center">{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}</div>
 
                                 {{-- KEMBALI --}}
-                                <div>{{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}</div>
+                                <div class="truncate flex justify-center">{{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}</div>
 
                                 {{-- STATUS --}}
-                                <div>
+                                <div class="truncate flex justify-center">
                                     @if ($item->status == 'pending')
                                         <span class="text-yellow-500 font-semibold">Pending</span>
                                     @elseif ($item->status == 'dipinjam')
@@ -134,7 +134,7 @@
                                 </div>
 
                                 {{-- AKSI --}}
-                                <div>
+                                <div class="truncate flex justify-center">
                                     @if ($item->status == 'dipinjam')
                                         <form action="{{ route('kembalikan.buku', $item->id) }}" method="POST">
                                             @csrf
@@ -171,14 +171,14 @@
         </section>
 
         <section
-            class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[500px] mt-10">
+            class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[400px] mt-10">
 
             <div class="px-8 py-5 border-b border-gray-100">
                 <h3 class="font-semibold text-slate-700 text-md">Dikembalikan</h3>
             </div>
 
             <div class="flex-1 flex flex-col">
-                <div class="grid grid-cols-6 bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
+                <div class="grid grid-cols-[80px_1fr_120px_120px_120px_120px] bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
                     <div>Cover</div>
                     <div>Judul</div>
                     <div>Pinjam</div>
@@ -187,31 +187,31 @@
                     <div>Aksi</div>
                 </div>
 
-                <div class="flex-1 flex flex-col items-center justify-center p-20">
+                <div class="flex-1 flex flex-col items-center justify-center">
                     @php
                         $selesai = $data->where('status', 'selesai');
                     @endphp
 
                     @if ($selesai->count())
                         @foreach ($selesai as $item)
-                            <div class="grid grid-cols-6 items-center px-8 py-4 border-b text-center text-sm">
+                            <div class="grid grid-cols-[80px_1fr_120px_120px_120px_120px] items-center px-8 py-4 border-b text-sm w-full">
 
                                 <div class="flex justify-center">
                                     <img src="{{ asset('storage/' . $item->buku->cover_image) }}"
                                         class="w-12 h-16 object-cover rounded">
                                 </div>
 
-                                <div>{{ $item->buku->judul_buku }}</div>
+                                <div class="truncate flex justify-center">{{ $item->buku->judul_buku }}</div>
 
-                                <div>{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}</div>
+                                <div class="truncate flex justify-center">{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}</div>
 
-                                <div>{{ \Carbon\Carbon::parse($item->tanggal_kembali)->format('d M Y') }}</div>
+                                <div class="truncate flex justify-center">{{ \Carbon\Carbon::parse($item->tanggal_kembali)->format('d M Y') }}</div>
 
-                                <div>
+                                <div class="truncate flex justify-center">
                                     <span class="text-gray-500 font-semibold">Selesai</span>
                                 </div>
 
-                                <div>
+                                <div class="truncate flex justify-center">
                                     @if ($item->denda > 0)
                                         <span class="text-red-500 font-semibold">
                                             Rp {{ number_format($item->denda) }}
@@ -237,10 +237,10 @@
         </section>
     </main>
 
-    <div id="modalDenda" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[999]">
+    <div id="modalDenda" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-[999]">
         <div class="bg-white rounded-2xl p-6 w-full max-w-md">
 
-            <h2 class="text-lg font-bold mb-3 text-[#004d4d]">Detail Denda</h2>
+            <h2 class="text-lg font-bold mb-3 text-[#003d3d]">Detail Denda</h2>
 
             <p class="text-gray-600 mb-2">
                 Total Denda:
