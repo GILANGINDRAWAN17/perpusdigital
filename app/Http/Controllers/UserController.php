@@ -12,7 +12,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = \App\Models\User::all();
+        $users = \App\Models\User::paginate(5);
         return view('kepalaperpus.daftaruser.user', compact('users'));
     }
 
@@ -42,7 +42,7 @@ class UserController extends Controller
         \App\Models\User::create([
             'username' => $request->username,
             'email' => $request->email,
-            'password' => bcrypt($request->password), // WAJIB
+            'password' => bcrypt($request->password), 
             'nama_lengkap' => $request->nama_lengkap,
             'no_telp' => $request->no_telp,
             'nik_nis' => $request->nik_nis,
@@ -97,7 +97,7 @@ class UserController extends Controller
             'nik_nis' => $request->nik_nis,
         ]);
 
-        return redirect('/daftaruser')->with('success', 'User berhasil diupdate');
+        return redirect('/daftaruser')->with('success', 'User "' . $user->username . '" berhasil diupdate');
     }
 
     /**

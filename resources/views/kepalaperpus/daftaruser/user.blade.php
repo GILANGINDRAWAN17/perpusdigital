@@ -16,6 +16,8 @@
     </style>
 </head>
 
+@include('layout.loading')
+
 <body class="bg-[#E2EDED] min-h-screen flex">
 
     @include('layout.sidebar')
@@ -26,13 +28,6 @@
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">User Pustaka</h1>
                 <p class="text-gray-500 text-sm mt-1">Berikut daftar seluruh user</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="relative bg-white p-2 rounded-full shadow-sm cursor-pointer border border-gray-100">
-                    <i data-lucide="bell" class="w-6 h-6 text-[#004d4d]"></i>
-                    <span
-                        class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">3</span>
-                </div>
             </div>
         </header>
 
@@ -69,7 +64,8 @@
             <div class="flex-1 flex flex-col overflow-x-auto">
 
                 <!-- HEADER -->
-                <div class="grid grid-cols-[60px_120px_160px_200px_140px_140px_200px_140px] w-max bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
+                <div
+                    class="grid grid-cols-[60px_120px_160px_200px_140px_140px_200px_140px] w-max bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
                     <div>Profile</div>
                     <div>Username</div>
                     <div>Nama Lengkap</div>
@@ -82,7 +78,8 @@
 
                 <!-- DATA -->
                 @foreach ($users as $user)
-                    <div class="grid grid-cols-[60px_120px_160px_200px_140px_140px_200px_140px] w-max items-center py-4 px-8 border-b text-center text-sm hover:bg-gray-50">
+                    <div
+                        class="grid grid-cols-[60px_120px_160px_200px_140px_140px_200px_140px] w-max items-center py-4 px-8 border-b text-center text-sm hover:bg-gray-50">
 
                         <div>👤</div>
                         <div>{{ $user->username }}</div>
@@ -116,7 +113,11 @@
 
             </div>
 
-            <div class="h-8 bg-white border-t border-gray-50"></div>
+            <div class="p-4 bg-white border-t border-gray-50">
+                <div>
+                    {{ $users->links() }}
+                </div>
+            </div>
         </section>
 
     </main>

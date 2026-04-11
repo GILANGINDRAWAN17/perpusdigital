@@ -8,6 +8,8 @@
 
 </head>
 
+@include('layout.loading')
+
 <body class="bg-[#E2EDED] min-h-screen flex">
 
     @include('layout.sidebar')
@@ -90,7 +92,7 @@
                                 <td class="p-3">
                                     @if ($item->cover_image)
                                         <img src="{{ asset('storage/' . $item->cover_image) }}"
-                                            class="w-14 h-20 object-cover rounded">
+                                            class="w-14 h-20 object-cover rounded mx-auto">
                                     @endif
                                 </td>
 
@@ -140,7 +142,11 @@
 
                 </table>
             </div>
-
+            <div class="p-4 bg-white border-t border-gray-50">
+                <div>
+                    {{ $buku->links() }}
+                </div>
+            </div>
         </section>
 
 

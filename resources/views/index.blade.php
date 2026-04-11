@@ -34,6 +34,7 @@
     </style>
 </head>
 
+
 <body class="min-h-screen flex items-center justify-center animated-bg">
 
 
@@ -142,6 +143,8 @@
 
     </div>
 
+    @include('layout.toast')
+
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
@@ -182,8 +185,6 @@
 
             const rightTitle = document.getElementById("rightTitle");
             const rightDesc = document.getElementById("rightDesc");
-
-            
 
             const switchBtn = document.getElementById("switchBtn");
 

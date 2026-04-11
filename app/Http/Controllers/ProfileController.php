@@ -42,9 +42,7 @@ class ProfileController extends Controller
             'password' => Hash::make($request->new_password),
         ]);
 
-        return response()->json([
-            'success' => true
-        ]);
+       return back()->with('success', 'Password berhasil diubah');
     }
 
     public function updateFoto(Request $request)

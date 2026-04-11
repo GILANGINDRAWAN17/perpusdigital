@@ -16,6 +16,8 @@
     </style>
 </head>
 
+@include('layout.loading')
+
 <body class="bg-[#E2EDED] min-h-screen flex">
 
     @include('layout.sidebar')
@@ -27,7 +29,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Profile</h1>
                 <p class="text-gray-500 text-sm mt-1">Kelola Akun Anda</p>
             </div>
-       
+
         </header>
 
         <div class="bg-white rounded-2xl p-8 shadow-xl shadow-slate-200/50 flex items-center gap-8 mb-6">
@@ -116,6 +118,7 @@
         </div>
     </main>
 
+    @include('layout.toast')
     @include('layout.gantipw')
     @include('layout.fotoprofile')
 

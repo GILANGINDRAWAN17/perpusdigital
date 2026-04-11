@@ -16,6 +16,8 @@
     </style>
 </head>
 
+@include('layout.loading')
+
 <body class="bg-[#E2EDED] min-h-screen flex">
 
     @include('layout.sidebar')
@@ -27,11 +29,11 @@
                 <h1 class="text-2xl font-bold text-gray-800">Profile</h1>
                 <p class="text-gray-500 text-sm">Kelola Akun Anda</p>
             </div>
-        
+
         </header>
 
         <div class="bg-white rounded-2xl p-8 shadow-xl shadow-slate-200/50 flex items-center gap-8 mb-6">
-                <div class="relative group w-32 h-32">
+            <div class="relative group w-32 h-32">
 
                 <!-- FOTO -->
                 <img id="previewImage" src="{{ Auth::user()->foto ? asset('storage/' . Auth::user()->foto) : '' }}"
@@ -115,6 +117,7 @@
         </div>
     </main>
 
+    @include('layout.toast')
     @include('layout.gantipw')
     @include('layout.fotoprofile')
 

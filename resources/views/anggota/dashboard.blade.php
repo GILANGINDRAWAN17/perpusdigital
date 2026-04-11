@@ -16,6 +16,8 @@
     </style>
 </head>
 
+@include('layout.loading')
+
 <body class="bg-[#E2EDED] min-h-screen flex">
 
     @include('layout.sidebar')
@@ -62,109 +64,189 @@
             </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                <div class="text-[#004d4d]"><i data-lucide="book-open-check" class="w-10 h-10"></i></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+            <div
+                class="flex items-center gap-5 p-7 bg-white hover:bg-gray-50 rounded-2xl shadow-sm border border-gray-100 hover:scale-[1.01] hover:shadow-lg transition-all duration-500">
+                <div class="flex items-center justify-center w-16 h-16 rounded-2xl bg-[#004d4d]/10 text-[#004d4d]">
+                    <i data-lucide="book-open-check" class="w-8 h-8"></i>
+                </div>
                 <div>
-                    <p class="text-[10px] font-bold text-gray-800 uppercase tracking-wider leading-none mb-1">Buku
-                        Dipinjam</p>
-                    <span class="text-3xl font-bold text-[#004d4d]">0</span>
+                    <p class="text-md font-medium text-gray-800 leading-none mb-2">Buku Dipinjam</p>
+                    <span class="text-3xl font-bold text-[#004d4d]">{{ $dipinjam }}</span>
                 </div>
             </div>
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                <div class="text-[#004d4d]"><i data-lucide="alarm-clock-check" class="w-10 h-10"></i></div>
-                <div>
-                    <p class="text-[10px] font-bold text-gray-800 uppercase tracking-wider leading-none mb-1">Jatuh
-                        Tempo</p>
-                    <span class="text-3xl font-bold text-[#004d4d]">0</span>
+
+
+            {{-- JATUH TEMPO --}}
+            @php
+                $isJatuhTempo = $jatuhTempo > 0;
+            @endphp
+
+            <div
+                class="flex items-center gap-5 p-7 rounded-2xl shadow-sm border transition-all duration-300
+                   {{ $isJatuhTempo ? 'bg-yellow-50 border-yellow-200' : 'bg-white border-gray-100 hover:bg-gray-50' }} 
+                    hover:scale-[1.01] hover:shadow-lg">
+
+                <!-- ICON -->
+                <div
+                    class="flex items-center justify-center w-16 h-16 rounded-2xl
+                      {{ $isJatuhTempo ? 'bg-yellow-100 text-yellow-500' : 'bg-[#004d4d]/10 text-[#004d4d]' }}">
+                    <i data-lucide="alarm-clock-check" class="w-8 h-8"></i>
                 </div>
-            </div>
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                <div class="text-[#004d4d]"><i data-lucide="circle-dollar-sign" class="w-10 h-10"></i></div>
+
+                <!-- TEXT -->
                 <div>
-                    <p class="text-[10px] font-bold text-gray-800 uppercase tracking-wider leading-none mb-1">Denda</p>
-                    <div class="flex items-baseline gap-1">
-                        <span class="text-sm font-bold text-[#004d4d]">Rp</span>
-                        <span class="text-3xl font-bold text-[#004d4d]">0</span>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                <div class="text-[#004d4d]"><i data-lucide="history" class="w-10 h-10"></i></div>
-                <div>
-                    <p class="text-[10px] font-bold text-gray-800 uppercase tracking-wider leading-none mb-1">Riwayat
+                    <p class="text-md font-medium text-gray-800 mb-1">
+                        Jatuh Tempo
                     </p>
-                    <span class="text-3xl font-bold text-[#004d4d]">0</span>
+
+                    @php
+                        $warna = $isJatuhTempo ? 'text-yellow-500' : 'text-[#004d4d]';
+                    @endphp
+
+                    <span class="text-3xl font-bold {{ $warna }}">
+                        {{ $jatuhTempo }}
+                    </span>
+
+                    {{-- KETERANGAN --}}
+                    @if ($isJatuhTempo)
+                        <p class="text-yellow-500 text-xs mt-2 font-medium">
+                            ⚠ Ada buku yang mendekati jatuh tempo
+                        </p>
+                    @endif
+                </div>
+
+            </div>
+
+
+            {{-- DENDA --}}
+            @php
+                $isDenda = $denda > 0;
+            @endphp
+
+            <div
+                class="flex items-center gap-5 p-7 rounded-2xl shadow-sm border transition-all duration-500 hover:scale-[1.01] hover:shadow-lg
+                 {{ $isDenda ? 'bg-red-50 border-red-200' : 'bg-white border-gray-100' }}">
+                <div
+                    class="flex items-center justify-center w-16 h-16 rounded-2xl 
+                      {{ $isDenda ? 'bg-red-100 text-red-500' : 'bg-[#004d4d]/10 text-[#004d4d]' }}">
+                    <i data-lucide="circle-dollar-sign" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <p class="text-md font-medium text-gray-800 leading-none mb-2">Denda</p>
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-sm font-bold {{ $denda > 0 ? 'text-red-500' : 'text-[#004d4d]' }}">
+                            Rp.
+                        </span>
+                        <span class="text-3xl font-bold {{ $denda > 0 ? 'text-red-500' : 'text-[#004d4d]' }}">
+                            {{ number_format($denda) }}
+                        </span>
+                    </div>
+                    @if ($denda > 0)
+                        <p class="text-red-500 text-xs mt-4 leading-snug font-medium hover:underline">
+                            ⚠ Silahkan datang ke perpustakaan <br> untuk membayar denda.
+                        </p>
+                    @endif
+                </div>
+            </div>
+
+
+
+            <div
+                class="flex items-center gap-5 p-7 bg-white hover:bg-gray-50 rounded-2xl shadow-sm border border-gray-100 hover:scale-[1.01] hover:shadow-lg transition-all duration-500">
+                <div class="flex items-center justify-center w-16 h-16 rounded-2xl bg-[#004d4d]/10 text-[#004d4d]">
+                    <i data-lucide="history" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <p class="text-md font-medium text-gray-800 leading-none mb-2">Riwayat Peminjaman</p>
+                    <span class="text-3xl font-bold text-[#004d4d]">{{ $riwayat }}</span>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
 
             <div class="lg:col-span-2 space-y-6">
-                <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden min-h-[220px]">
                     <div class="p-4 flex justify-between items-center border-b border-gray-50">
                         <h2 class="font-bold text-gray-700">Buku Dipinjam</h2>
-                        <a href="#" class="text-[#004d4d] text-xs font-semibold hover:underline">Lihat
+                        <a href="/riwayat" class="text-[#004d4d] text-xs font-semibold hover:underline">Lihat
                             Selengkapnya</a>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-gray-50 text-gray-400 uppercase text-[10px] tracking-widest">
+                        <table class="w-full">
+                            <thead class="bg-[#004d4d] text-white font-bold text-sm tracking-widest">
                                 <tr>
-                                    <th class="px-6 py-3 font-medium">Cover</th>
-                                    <th class="px-6 py-3 font-medium">Judul Buku</th>
-                                    <th class="px-6 py-3 font-medium">Jatuh Tempo</th>
-                                    <th class="px-6 py-3 font-medium text-center">Status</th>
+                                    <th class="px-6 py-3 text-center">Cover</th>
+                                    <th class="px-6 py-3 text-center">Judul Buku</th>
+                                    <th class="px-6 py-3 text-center">Jatuh Tempo</th>
+                                    <th class="px-6 py-3 text-center">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-t border-gray-50">
-                                    <td colspan="4" class="px-6 py-12 text-center text-gray-400 italic font-light">
-                                        Tidak ada data buku yang dipinjam.
-                                    </td>
-                                </tr>
+                                @forelse ($bukuDipinjam as $item)
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+
+                                        <!-- COVER -->
+                                        <td class="px-6 py-3 text-center">
+                                            <img src="{{ asset('storage/' . $item->buku->cover_image) }}"
+                                                class="w-10 h-14 rounded object-cover mx-auto">
+                                        </td>
+
+                                        <!-- JUDUL -->
+                                        <td class="px-6 py-3 text-center truncate">
+                                            {{ $item->buku->judul_buku }}
+                                        </td>
+
+                                        <!-- JATUH TEMPO -->
+                                        <td class="px-6 py-3 text-center">
+                                            {{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}
+                                        </td>
+
+                                        <!-- STATUS -->
+                                        <td class="px-6 py-3 text-center">
+                                            @if ($item->status == 'dipinjam')
+                                                <span class="text-green-500 font-semibold">Dipinjam</span>
+                                            @elseif ($item->status == 'terlambat')
+                                                <span class="text-red-500 font-semibold">Terlambat</span>
+                                            @endif
+                                        </td>
+
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-12 text-center text-gray-400 italic">
+                                            Tidak ada data buku yang dipinjam.
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
                 </section>
 
-                <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden min-h-[220px]">
                     <div class="p-4 flex justify-between items-center border-b border-gray-50">
                         <h2 class="font-bold text-gray-700">Aktivitas Terbaru</h2>
-                        <a href="#" class="text-[#004d4d] text-xs font-semibold hover:underline">Lihat
+                        <a href="/riwayat" class="text-[#004d4d] text-xs font-semibold hover:underline">Lihat
                             Selengkapnya</a>
                     </div>
-                    <div class="px-6 py-12 text-center text-gray-400 italic font-light">
-                        Belum ada aktivitas terbaru.
+                    <div class="px-6 py-6 space-y-3">
+                        @forelse ($aktivitas as $item)
+                            <div class="flex justify-between text-sm border-b pb-2">
+                                <span>{{ $item->buku->judul_buku }}</span>
+                                <span class="text-gray-400">
+                                    {{ $item->created_at->diffForHumans() }}
+                                </span>
+                            </div>
+                        @empty
+                            <div class="text-center text-gray-400 italic">
+                                Belum ada aktivitas terbaru.
+                            </div>
+                        @endforelse
                     </div>
                 </section>
             </div>
-
-            <div class="space-y-6">
-                <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-4 flex justify-between items-center border-b border-gray-50">
-                        <h2 class="font-bold text-gray-700 text-sm">Rekomendasi Buku</h2>
-                        <a href="#" class="text-[#004d4d] text-[10px] font-semibold hover:underline">Lihat
-                            Selengkapnya</a>
-                    </div>
-                    <div class="px-6 py-20 text-center text-gray-400 italic font-light text-sm">
-                        Data kosong
-                    </div>
-                </section>
-
-                <section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-4 flex justify-between items-center border-b border-gray-50">
-                        <h2 class="font-bold text-gray-700 text-sm">Catatan Denda</h2>
-                        <a href="#" class="text-[#004d4d] text-[10px] font-semibold hover:underline">Lihat
-                            Selengkapnya</a>
-                    </div>
-                    <div class="px-6 py-16 text-center text-gray-400 italic font-light text-sm">
-                        Tidak ada denda aktif
-                    </div>
-                </section>
-            </div>
-
         </div>
     </main>
 

@@ -30,6 +30,8 @@
     </style>
 </head>
 
+@include('layout.loading')
+
 <body class="bg-[#E2EDED] min-h-screen flex">
 
     @include('layout.sidebar')
@@ -160,7 +162,8 @@
             </button>
         </div>
     </main>
-
+    
+    @include('layout.toast')
     @include('layout.notifikasi')
     @include('layout.gantipw')
     @include('layout.fotoprofile')
@@ -169,7 +172,7 @@
         lucide.createIcons();
     </script>
 
-    
+
 
 </body>
 

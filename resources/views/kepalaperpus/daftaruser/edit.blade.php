@@ -13,6 +13,8 @@
 
 <body class="bg-gray-100">
 
+@include('layout.loading')
+
 <div class="container mx-auto px-6 py-10">
 
     <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-xl p-8">
@@ -117,6 +119,8 @@
     </div>
 
 </div>
+
+@include('layout.toast')
 
 </body>
 </html>

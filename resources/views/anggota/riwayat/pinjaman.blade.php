@@ -16,6 +16,8 @@
     </style>
 </head>
 
+@include('layout.loading')
+
 <body class="bg-[#E2EDED] min-h-screen flex">
 
     @include('layout.sidebar')
@@ -87,10 +89,12 @@
             </div>
 
             <div class="flex-1 flex flex-col">
-                <div class="grid grid-cols-[80px_1fr_120px_120px_120px_120px] bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
+                <div
+                    class="grid grid-cols-[80px_1fr_120px_120px_120px_120px_120px] bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
                     <div>Cover</div>
                     <div>Judul</div>
                     <div>Pinjam</div>
+                    <div>Jatuh Tempo</div>
                     <div>Kembali</div>
                     <div>Status</div>
                     <div>Aksi</div>
@@ -103,7 +107,8 @@
 
                     @if ($dipinjam->count())
                         @foreach ($dipinjam as $item)
-                            <div class="grid grid-cols-[80px_1fr_120px_120px_120px_120px] items-center px-8 py-4 border-b text-sm w-full">
+                            <div
+                                class="grid grid-cols-[80px_1fr_120px_120px_120px_120px_120px] items-center px-8 py-4 border-b text-sm w-full">
 
                                 {{-- COVER --}}
                                 <div class="flex justify-center">
@@ -115,10 +120,19 @@
                                 <div class="truncate flex justify-center">{{ $item->buku->judul_buku }}</div>
 
                                 {{-- PINJAM --}}
-                                <div class="truncate flex justify-center">{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}</div>
+                                <div class="truncate flex justify-center">
+                                    {{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}
+                                </div>
+
+                                {{-- JATUH TEMPO --}}
+                                <div class="truncate flex justify-center">
+                                    {{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}
+                                </div>
 
                                 {{-- KEMBALI --}}
-                                <div class="truncate flex justify-center">{{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}</div>
+                                <div class="truncate flex justify-center">
+                                    {{ \Carbon\Carbon::parse($item->tanggal_kembali)->format('d M Y') }}
+                                </div>
 
                                 {{-- STATUS --}}
                                 <div class="truncate flex justify-center">
@@ -178,13 +192,15 @@
             </div>
 
             <div class="flex-1 flex flex-col">
-                <div class="grid grid-cols-[80px_1fr_120px_120px_120px_120px] bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
+                <div
+                    class="grid grid-cols-[80px_1fr_120px_120px_120px_120px_120px] bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
                     <div>Cover</div>
                     <div>Judul</div>
                     <div>Pinjam</div>
+                    <div>Jatuh Tempo</div>
                     <div>Kembali</div>
                     <div>Status</div>
-                    <div>Aksi</div>
+                    <div>Denda</div>
                 </div>
 
                 <div class="flex-1 flex flex-col items-center justify-center">
@@ -194,7 +210,8 @@
 
                     @if ($selesai->count())
                         @foreach ($selesai as $item)
-                            <div class="grid grid-cols-[80px_1fr_120px_120px_120px_120px] items-center px-8 py-4 border-b text-sm w-full">
+                            <div
+                                class="grid grid-cols-[80px_1fr_120px_120px_120px_120px_120px] items-center px-8 py-4 border-b text-sm w-full">
 
                                 <div class="flex justify-center">
                                     <img src="{{ asset('storage/' . $item->buku->cover_image) }}"
@@ -203,9 +220,20 @@
 
                                 <div class="truncate flex justify-center">{{ $item->buku->judul_buku }}</div>
 
-                                <div class="truncate flex justify-center">{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}</div>
+                                {{-- PINJAM --}}
+                                <div class="truncate flex justify-center">
+                                    {{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}
+                                </div>
 
-                                <div class="truncate flex justify-center">{{ \Carbon\Carbon::parse($item->tanggal_kembali)->format('d M Y') }}</div>
+                                {{-- JATUH TEMPO --}}
+                                <div class="truncate flex justify-center">
+                                    {{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}
+                                </div>
+
+                                {{-- KEMBALI --}}
+                                <div class="truncate flex justify-center">
+                                    {{ \Carbon\Carbon::parse($item->tanggal_kembali)->format('d M Y') }}
+                                </div>
 
                                 <div class="truncate flex justify-center">
                                     <span class="text-gray-500 font-semibold">Selesai</span>
@@ -237,10 +265,14 @@
         </section>
     </main>
 
-    <div id="modalDenda" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-[999]">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-md">
+    <div id="modalDenda"
+        class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[999]
+           opacity-0 pointer-events-none transition-all duration-300">
+        <div id="modalBoxDenda"
+            class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl
+           scale-90 opacity-0 transition-all duration-300">
 
-            <h2 class="text-lg font-bold mb-3 text-[#003d3d]">Detail Denda</h2>
+            <h2 class="text-lg font-bold mb-3 text-[#002d2d]">Detail Denda</h2>
 
             <p class="text-gray-600 mb-2">
                 Total Denda:
@@ -250,8 +282,8 @@
                 Rp 0
             </p>
 
-            <p class="text-sm text-gray-500 mb-6">
-                Silahkan datang ke perpustakaan untuk membayar denda.
+            <p class="text-sm text-red-500 hover:underline mb-6">
+                ⚠ Silahkan datang ke perpustakaan untuk membayar denda.
             </p>
 
             <div class="text-right">
@@ -268,18 +300,36 @@
     <script>
         // Inisialisasi Lucide Icons
         lucide.createIcons();
-
+        
         function openDenda(denda) {
             const modal = document.getElementById('modalDenda');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            const box = document.getElementById('modalBoxDenda');
 
+            // tampilkan nominal
             document.getElementById('jumlahDenda').innerText =
                 'Rp ' + new Intl.NumberFormat('id-ID').format(denda);
+
+            // munculin overlay
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+
+            // animasi masuk
+            setTimeout(() => {
+                box.classList.remove('scale-90', 'opacity-0');
+                box.classList.add('scale-100', 'opacity-100');
+            }, 50);
         }
 
         function closeDenda() {
-            document.getElementById('modalDenda').classList.add('hidden');
+            const modal = document.getElementById('modalDenda');
+            const box = document.getElementById('modalBoxDenda');
+
+            // animasi keluar
+            box.classList.remove('scale-100', 'opacity-100');
+            box.classList.add('scale-90', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+            }, 200);
         }
     </script>
 </body>

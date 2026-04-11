@@ -194,7 +194,7 @@
                     // SUCCESS 🔥
                     closeModal();
 
-                    showToast("Password berhasil diubah", "success");
+                   window.showToast("Password berhasil diubah", "success");
 
                 });
         }
@@ -203,23 +203,5 @@
             const el = document.getElementById(id);
             el.innerText = msg;
             el.classList.remove('hidden');
-        }
-
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-
-            toast.className = `
-        fixed top-5 right-5 z-[9999]
-        px-5 py-3 rounded-lg text-white shadow-lg
-        ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}
-        animate-[fadeIn_.3s]
-    `;
-
-            toast.innerText = message;
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
         }
     </script>

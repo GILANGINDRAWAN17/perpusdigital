@@ -14,6 +14,8 @@
     </style>
 </head>
 
+@include('layout.loading')
+
 <body class="bg-gray-100">
 
     <div class="container mx-auto px-6 py-10">
@@ -88,10 +90,12 @@
                 </div>
 
             </form>
-
+        
         </div>
 
     </div>
+
+    @include('layout.toast')
 
 </body>
 

@@ -15,13 +15,15 @@ class Peminjaman extends Model
         'tanggal_jatuh_tempo',
         'tanggal_kembali',
         'status',
-        'denda'
+        'denda',
+        'petugas_id'
     ];
 
     protected $casts = [
         'tanggal_pinjam' => 'datetime',
         'tanggal_jatuh_tempo' => 'datetime',
         'tanggal_kembali' => 'datetime',
+        'petugas_id' => 'integer'
     ];
 
     public function user()
@@ -32,5 +34,10 @@ class Peminjaman extends Model
     public function buku()
     {
         return $this->belongsTo(Buku::class);
+    }
+
+    public function petugas()
+    {
+        return $this->belongsTo(User::class, 'petugas_id');
     }
 }

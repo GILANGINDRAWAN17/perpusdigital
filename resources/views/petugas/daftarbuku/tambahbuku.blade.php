@@ -11,6 +11,8 @@
 </head>
 <body class="bg-gray-100">
 
+@include('layout.loading')
+
 <div class="container mx-auto px-6 py-10">
 
     <div class="bg-white p-6 rounded-xl shadow-md">
@@ -99,6 +101,8 @@
     </div>
 
 </div>
+
+@include('layout.toast')
 
 </body>
 </html>

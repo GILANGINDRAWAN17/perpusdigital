@@ -20,7 +20,7 @@
                 <input type="date" name="tanggal_pinjam" class="w-full border p-2 rounded mt-1" required>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-5">
                 <label class="text-sm">Tanggal Jatuh Tempo</label>
                 <input type="date" name="tanggal_jatuh_tempo" class="w-full border p-2 rounded mt-1" required>
             </div>
@@ -54,7 +54,7 @@
 
         modalAction = action;
 
-        // 🔥 kalau modal pinjam
+        // kalau modal pinjam
         if (type === 'pinjam') {
             form.classList.remove('hidden');
 
@@ -92,7 +92,7 @@
 
             const form = document.getElementById('formPinjam');
 
-            // 🔥 kalau ada form → submit
+            // kalau ada form → submit
             if (!form.classList.contains('hidden')) {
                 form.submit();
                 return;

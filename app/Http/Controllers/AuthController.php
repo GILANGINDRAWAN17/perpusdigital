@@ -42,11 +42,11 @@ class AuthController extends Controller
         Auth::login($user);
 
         if ($user->role == 'anggota') {
-            return redirect('/dashboard');
+            return redirect('/dashboard')->with('success', 'Selamat datang, ' . $user->username);
         } elseif ($user->role == 'petugas') {
-            return redirect('/dashboardpetugas');
+            return redirect('/dashboardpetugas')->with('success', 'Selamat datang, ' . $user->username);
         } elseif ($user->role == 'kepala_perpustakaan') {
-            return redirect('/dashboardkepalaperpus');
+            return redirect('/dashboardkepalaperpus')->with('success', 'Selamat datang, ' . $user->username);
         }
     }
 
@@ -82,13 +82,13 @@ class AuthController extends Controller
         // Simpan Data User ke Database
         User::create($data);
 
-        return redirect('/login');
+        return redirect('/login')->with('success', 'Registrasi berhasil, silahkan login');
     }
 
     // Fungsi Logout
     public function logout(Request $request)
     {
-        Auth::logout(); 
+        Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

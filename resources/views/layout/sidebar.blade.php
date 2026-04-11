@@ -27,9 +27,9 @@
 
             <!-- DEFAULT ICON -->
             <div id="defaultIcon"
-                class="w-10 h-10 bg-[#004d4d] rounded-full border border-[#003d3d] shadow-lg flex items-center justify-center text-white
+                class="w-10 h-10 bg-[#004d4d] rounded-full border border-[#027676] shadow-lg flex items-center justify-center text-white
                      {{ Auth::user()->foto ? 'hidden' : '' }}">
-                <i data-lucide="user-round" class="w-20 h-20 opacity-80"></i>
+                <i data-lucide="user-round" class="w-5 h-5 opacity-80"></i>
             </div>
         </div>
         <div class="ml-1 min-w-0">

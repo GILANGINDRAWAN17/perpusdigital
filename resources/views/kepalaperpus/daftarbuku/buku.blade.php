@@ -11,6 +11,9 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
+
+@include('layout.loading')
+
 <body class="bg-[#E2EDED] min-h-screen flex">
 
     @include('layout.sidebar')

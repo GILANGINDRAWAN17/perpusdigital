@@ -16,6 +16,8 @@
     </style>
 </head>
 
+@include('layout.loading')
+
 <body class="bg-[#E2EDED] min-h-screen flex">
 
     @include('layout.sidebar')
@@ -27,7 +29,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Pinjaman Buku</h1>
                 <p class="text-gray-500 text-sm mt-1">Kelola Peminjaman Buku</p>
             </div>
-      
+
         </header>
 
 
@@ -49,82 +51,105 @@
             </button>
         </div>
 
-        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[500px]">
+        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[400px]">
 
             <div class="px-8 py-5 border-b border-gray-100">
                 <h3 class="font-semibold text-slate-700 text-md">Daftar Buku Dipinjam</h3>
             </div>
 
-            <div class="flex-1 flex flex-col">
-                <div class="grid grid-cols-6 bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
-                    <div>Cover</div>
-                    <div>Judul</div>
-                    <div>Pinjam</div>
-                    <div>Kembali</div>
-                    <div>Status</div>
-                    <div>Aksi</div>
-                </div>
-
-                @if ($data->count())
-                    @foreach ($data as $item)
-                        <div class="grid grid-cols-6 items-center px-8 py-4 border-b text-center text-sm">
-
-                            {{-- COVER --}}
-                            <div class="flex justify-center">
-                                <img src="{{ asset('storage/' . $item->buku->cover_image) }}"
-                                    class="w-12 h-16 object-cover rounded">
-                            </div>
-
-                            {{-- JUDUL --}}
-                            <div>{{ $item->buku->judul_buku }}</div>
-
-                            {{-- PINJAM --}}
-                            <div>{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}</div>
-
-                            {{-- KEMBALI --}}
-                            <div>{{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}</div>
-
-                            {{-- STATUS --}}
-                            <div>
-                                @if ($item->status == 'pending')
-                                    <span class="text-yellow-500 font-semibold">Pending</span>
-                                @elseif ($item->status == 'dipinjam')
-                                    <span class="text-green-500 font-semibold">Dipinjam</span>
-                                @endif
-                            </div>
-
-                            {{-- AKSI --}}
-                            <div class="flex gap-2 justify-center">
-
-                                @if ($item->status == 'pending')
-                                    <form action="{{ route('peminjaman.approve', $item->id) }}" method="POST">
-                                        @csrf
-                                        <button class="bg-[#004d4d] hover:bg-[#003d3d] text-white px-3 py-2 font-medium transition-all duration-300 rounded text-sm">
-                                            Approve
-                                        </button>
-                                    </form>
-
-                                    <form action="{{ route('peminjaman.tolak', $item->id) }}" method="POST">
-                                        @csrf
-                                        <button class="bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 px-3 py-2 rounded text-sm">
-                                            Tolak
-                                        </button>
-                                    </form>
-                                @else
-                                    <span>-</span>
-                                @endif
-
-                            </div>
-
-                        </div>
-                    @endforeach
-                @else
-                    <div class="flex-1 flex items-center justify-center p-20">
-                        <p class="text-gray-500">Belum ada data peminjaman</p>
+            <div class="flex-1 flex flex-col overflow-x-auto">
+                <div class="min-w-[1100px]">
+                    <div
+                        class="sticky grid grid-cols-[80px_200px_160px_120px_120px_120px_120px_120px] bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
+                        <div>Cover</div>
+                        <div>Judul</div>
+                        <div>Peminjam</div>
+                        <div>Pinjam</div>
+                        <div>Jatuh Tempo</div>
+                        <div>Kembali</div>
+                        <div>Status</div>
+                        <div>Aksi</div>
                     </div>
-                @endif
-            </div>
 
+                    @if ($data->count())
+                        @foreach ($data as $item)
+                            <div
+                                class="sticky grid grid-cols-[80px_200px_160px_120px_120px_120px_120px_120px] items-center px-8 py-4 border-b text-center text-sm">
+
+                                {{-- COVER --}}
+                                <div class="flex justify-center">
+                                    <img src="{{ asset('storage/' . $item->buku->cover_image) }}"
+                                        class="w-12 h-16 object-cover rounded">
+                                </div>
+
+                                {{-- JUDUL --}}
+                                <div>{{ $item->buku->judul_buku }}</div>
+
+                                <!-- PEMINJAM -->
+                                <div class="truncate whitespace-nowrap text-center">
+                                    {{ $item->user->username ?? '-' }}
+                                </div>
+
+                                {{-- PINJAM --}}
+                                <div>{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d M Y') }}</div>
+
+                                <!-- JATUH TEMPO -->
+                                <div class="text-center">
+                                    @if (now()->gt($item->tanggal_jatuh_tempo) && !$item->tanggal_kembali)
+                                        <span class="text-red-500 font-semibold">
+                                            {{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}
+                                        </span>
+                                    @else
+                                        {{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}
+                                    @endif
+                                </div>
+
+                                {{-- KEMBALI --}}
+                                <div>{{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}</div>
+
+                                {{-- STATUS --}}
+                                <div>
+                                    @if ($item->status == 'pending')
+                                        <span class="text-yellow-500 font-semibold">Pending</span>
+                                    @elseif ($item->status == 'dipinjam')
+                                        <span class="text-green-500 font-semibold">Dipinjam</span>
+                                    @endif
+                                </div>
+
+                                {{-- AKSI --}}
+                                <div class="flex gap-2 justify-center">
+
+                                    @if ($item->status == 'pending')
+                                        <form action="{{ route('peminjaman.approve', $item->id) }}" method="POST">
+                                            @csrf
+                                            <button
+                                                class="bg-green-500 hover:bg-green-600 text-white px-3 py-2 font-medium transition-all duration-300 rounded text-sm">
+                                                Approve
+                                            </button>
+                                        </form>
+
+                                        <form action="{{ route('peminjaman.tolak', $item->id) }}" method="POST">
+                                            @csrf
+                                            <button
+                                                class="bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 px-3 py-2 rounded text-sm">
+                                                Tolak
+                                            </button>
+                                        </form>
+                                    @else
+                                        <span>-</span>
+                                    @endif
+
+                                </div>
+
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="flex-1 flex items-center justify-center p-20">
+                            <p class="text-gray-500">Belum ada data peminjaman</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
 
         </section>
 

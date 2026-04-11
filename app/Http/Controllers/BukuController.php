@@ -14,14 +14,14 @@ class BukuController extends Controller
 {
     public function index(Request $request)
     {
-        $buku = Buku::all();
+        $buku = Buku::paginate(5);
         return view('petugas.daftarbuku.buku', compact('buku'));
     }
 
 
     public function katalog()
     {
-        $buku = Buku::all();
+        $buku = Buku::paginate(4);
         return view('anggota.daftarbuku.buku', compact('buku'));
     }
 
@@ -86,7 +86,8 @@ class BukuController extends Controller
 
         $buku->update($validated);
 
-        return redirect()->route('buku.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('buku.index')
+            ->with('success', 'Buku "' . $buku->judul_buku . '" berhasil diperbarui');
     }
 
     public function destroy(Buku $buku)
@@ -167,8 +168,8 @@ class BukuController extends Controller
                     ->copy()
                     ->startOfDay()
                     ->diffInDays(now()->startOfDay());
-                    
-                $denda = $telat * 1000;
+
+                $denda = max(0, $telat * 1000);
 
                 $item->update([
                     'status' => 'terlambat',
@@ -224,7 +225,7 @@ class BukuController extends Controller
                     ->startOfDay()
                     ->diffInDays(now()->startOfDay());
 
-                $denda = $telat * 1000;
+                $denda = max(0, $telat * 1000);
 
                 $item->update([
                     'status' => 'terlambat',
@@ -304,25 +305,24 @@ class BukuController extends Controller
     {
         $peminjaman = Peminjaman::findOrFail($id);
 
-        if ($peminjaman->status == 'menunggu_kembali') {
+        if (in_array($peminjaman->status, ['menunggu_kembali', 'terlambat'])) {
 
-            $tanggalKembali = now();
+            $tanggalKembali = now()->startOfDay();
+            $jatuhTempo = $peminjaman->tanggal_jatuh_tempo->copy()->startOfDay();
+
+            $telat = 0;
             $denda = 0;
 
-            if (now()->greaterThan($peminjaman->tanggal_jatuh_tempo)) {
-
-                $jatuhTempo = $peminjaman->tanggal_jatuh_tempo->copy()->startOfDay();
-                $sekarang = now()->startOfDay();
-
-                $telat = max(0, $jatuhTempo->diffInDays($sekarang));
-
-                $denda = $telat * 1000;
+            if ($tanggalKembali->greaterThan($jatuhTempo)) {
+                $telat = $jatuhTempo->diffInDays($tanggalKembali);
+                $denda = max(0, $telat * 1000);
             }
 
             $peminjaman->update([
                 'status' => 'selesai',
                 'tanggal_kembali' => $tanggalKembali,
-                'denda' => $denda
+                'denda' => $denda,
+                'petugas_id' => auth()->id()
             ]);
 
             $peminjaman->buku->increment('stock_buku');
@@ -334,5 +334,108 @@ class BukuController extends Controller
         }
 
         return back()->with('success', 'Pengembalian dikonfirmasi');
+    }
+
+    public function transaksi()
+    {
+        $data = \App\Models\Peminjaman::with(['user', 'buku', 'petugas'])
+            ->latest()
+            ->paginate(5);
+
+        return view('kepalaperpus.transaksi', compact('data'));
+    }
+
+    public function dashboardKepala()
+    {
+        $totalBuku = \App\Models\Buku::count();
+
+        $totalPeminjaman = \App\Models\Peminjaman::count();
+
+        $totalPengembalian = \App\Models\Peminjaman::where('status', 'selesai')->count();
+
+        $jumlahAnggota = \App\Models\User::where('role', 'anggota')->count();
+
+        return view('kepalaperpus.dashboard', compact(
+            'totalBuku',
+            'totalPeminjaman',
+            'totalPengembalian',
+            'jumlahAnggota'
+        ));
+    }
+
+    public function dashboardPetugas()
+    {
+        // Pengajuan (pending)
+        $pengajuan = Peminjaman::where('status', 'pending')->count();
+
+        // Buku sedang dipinjam
+        $dipinjam = Peminjaman::where('status', 'dipinjam')->count();
+
+        // Buku sudah dikembalikan
+        $dikembalikan = Peminjaman::where('status', 'selesai')->count();
+
+        // Total buku
+        $totalBuku = Buku::count();
+
+        // Pengajuan terbaru (limit 5)
+        $pengajuanTerbaru = Peminjaman::with('user', 'buku')
+            ->where('status', 'pending')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('petugas.dashboard', compact(
+            'pengajuan',
+            'dipinjam',
+            'dikembalikan',
+            'totalBuku',
+            'pengajuanTerbaru'
+        ));
+    }
+
+    public function dashboardAnggota()
+    {
+        $userId = auth()->id();
+
+        // Buku sedang dipinjam
+        $dipinjam = Peminjaman::where('user_id', $userId)
+            ->whereIn('status', ['dipinjam', 'terlambat'])
+            ->count();
+
+        // Jatuh tempo (yang mendekati / lewat)
+        $jatuhTempo = Peminjaman::where('user_id', $userId)
+            ->whereIn('status', ['dipinjam', 'terlambat'])
+            ->whereDate('tanggal_jatuh_tempo', '<=', now()->addDays(3))
+            ->count();
+
+        // Total denda
+        $denda = Peminjaman::where('user_id', $userId)->sum('denda');
+
+        // Riwayat
+        $riwayat = Peminjaman::where('user_id', $userId)->count();
+
+        // Buku dipinjam (list)
+        $bukuDipinjam = Peminjaman::with('buku')
+            ->where('user_id', $userId)
+            ->whereIn('status', ['dipinjam', 'terlambat'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Aktivitas terbaru
+        $aktivitas = Peminjaman::with('buku')
+            ->where('user_id', $userId)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('anggota.dashboard', compact(
+            'dipinjam',
+            'jatuhTempo',
+            'denda',
+            'riwayat',
+            'bukuDipinjam',
+            'aktivitas'
+        ));
     }
 }

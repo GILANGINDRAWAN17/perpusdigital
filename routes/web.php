@@ -15,19 +15,16 @@ Route::get('/', function () {
     return view('index');
 });
 
-
-
+//LOGIN & REGISTER
 Route::get('/login', [AuthController::class, 'indexLogin']);
 Route::post('/login', [AuthController::class, 'masuk']);
-
 Route::post('/register', [AuthController::class, 'daftar']);
 
 
-
 //ANGGOTA
-Route::get('/dashboard', function () {
-    return view('anggota.dashboard');
-})->middleware(anggota::class);
+Route::get('/dashboard', [BukuController::class, 'dashboardAnggota'])
+    ->middleware(anggota::class)
+    ->name('dashboard.anggota');
 
 Route::get('/katalog', [
     BukuController::class,
@@ -83,13 +80,11 @@ Route::get('/notifikasi/data', function () {
 
 
 //KEPALA PERPUSTAKAAN
-Route::get('/dashboardkepalaperpus', function () {
-    return view('kepalaperpus.dashboard');
-})->middleware(kepalaperpustakaan::class);
+Route::get('/dashboardkepalaperpus', [BukuController::class, 'dashboardKepala'])
+    ->middleware(kepalaperpustakaan::class)
+    ->name('dashboard.kepala');
 
-Route::get('/transaksi', function () {
-    return view('kepalaperpus.transaksi');
-})->middleware(kepalaperpustakaan::class);
+Route::get('/transaksi', [BukuController::class, 'transaksi'])->name('transaksi');
 
 Route::get('/daftaruser', [
     UserController::class,
@@ -108,9 +103,9 @@ Route::middleware(['auth', 'role:kepala_perpustakaan'])->group(function () {
 
 
 //PETUGAS
-Route::get('/dashboardpetugas', function () {
-    return view('petugas.dashboard');
-})->middleware(petugas::class);
+Route::get('/dashboardpetugas', [BukuController::class, 'dashboardPetugas'])
+    ->middleware(petugas::class)
+    ->name('dashboard.petugas');
 
 // Approve peminjaman
 Route::post('/peminjaman/{id}/approve', [BukuController::class, 'approve'])
@@ -133,18 +128,14 @@ Route::get('/peminjaman', [BukuController::class, 'peminjaman'])
 Route::get('/pengembalian', [BukuController::class, 'pengembalian'])
     ->middleware(petugas::class);
 
-Route::post('/confirm-kembali/{id}', [BukuController::class, 'confirmKembali'])
-    ->name('confirm.kembali');
-
 Route::get('/profilepetugas', function () {
     return view('petugas.profile.profilepetugas');
 })->middleware(petugas::class);
 
 //Daftar buku, hanya dapat diakses oleh petugas dan kepala
-Route::get('/daftarbuku', function () {
-    $buku = App\Models\Buku::all();
-    return view('petugas.daftarbuku.buku', compact('buku'));
-})->middleware(petugasdankepala::class)->name('daftarbuku');
+Route::get('/daftarbuku', [BukuController::class, 'index'])
+    ->middleware(petugasdankepala::class)
+    ->name('daftarbuku');
 
 Route::controller(BukuController::class)->group(function () {
     Route::get('/buku', 'index')->name('buku.index');

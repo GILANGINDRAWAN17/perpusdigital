@@ -16,7 +16,11 @@
     </style>
 </head>
 
+@include('layout.loading')
+
 <body class="bg-[#E2EDED] min-h-screen flex">
+
+
 
     @include('layout.sidebar')
 
@@ -83,7 +87,7 @@
 
                 @foreach ($buku as $item)
                     <div
-                        class="bg-white border border-slate-50 p-5 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 flex gap-5 group">
+                        class="bg-white border border-slate-200 p-5 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 flex gap-5 group">
 
                         {{-- COVER --}}
                         <div
@@ -134,7 +138,7 @@
                             {{-- BUTTON --}}
                             @if ($item->stock_buku > 0)
                                 <button
-                                    onclick="openModal('Form Peminjaman', 'Silahkan pilih tanggal peminjaman', null, 'pinjam', {{ $item->id }})""
+                                    onclick="openModal('Form Peminjaman', 'Silahkan pilih tanggal peminjaman', null, 'pinjam', {{ $item->id }})"
                                     class="bg-[#004d4d] text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 hover:bg-[#003d3d] shadow-md shadow-[#004d4d]/20 transition-all duration-300">
                                     Pinjam
                                 </button>
@@ -150,12 +154,17 @@
                 @endforeach
 
             </div>
-
+            <div class="p-4 bg-white border-t border-gray-50">
+                <div>
+                    {{ $data->links() }}
+                </div>
+            </div>
         </section>
 
     </main>
 
     @include('layout.notifikasi')
+    @include('layout.toast')
 
     <script>
         // Inisialisasi Lucide Icons
