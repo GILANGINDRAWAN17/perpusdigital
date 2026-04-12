@@ -3,9 +3,9 @@
     class="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/20 z-[9999] opacity-0 pointer-events-none transition-all duration-300">
 
     <div
-        class="bg-white rounded-2xl shadow-lg p-14 flex flex-col items-center gap-3 scale-95 transition-all duration-300">
+        class="bg-white rounded-2xl shadow-lg px-20 py-12 flex flex-col items-center gap-3 scale-95 transition-all duration-300">
         <div class="w-10 h-10 border-4 border-[#004d4d] border-t-transparent rounded-full animate-spin"></div>
-        <p class="animate-pulse text-sm text-gray-600 mt-2">Memuat halaman...</p>
+        <p class="animate-pulse text-sm text-gray-600 mt-2">Memuat...</p>
     </div>
 </div>
 

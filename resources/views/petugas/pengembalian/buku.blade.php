@@ -31,21 +31,16 @@
         </header>
 
         <!-- SEARCH -->
-        <div class="flex gap-4 mb-10">
-            <div class="relative flex-1 max-w-xs shadow-sm">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
-                <input type="text" placeholder="Cari pengembalian buku..."
-                    class="w-full pl-12 pr-4 py-3.5 rounded-xl border-none focus:ring-2 focus:ring-[#004d4d] outline-none shadow-md">
-            </div>
-
-            <button class="bg-[#004d4d] px-6 py-3.5 rounded-xl text-white font-semibold flex items-center gap-2">
-                Status <i data-lucide="chevron-down" class="w-4 h-4"></i>
-            </button>
-
-            <button class="bg-[#004d4d] px-10 py-3.5 rounded-xl text-white font-bold">
-                Cari
-            </button>
-        </div>
+        <x-filter-bar action="{{ route('pengembalian') }}" :filters="[
+            [
+                'name' => 'status',
+                'label' => 'Status',
+                'options' => [
+                    'menunggu_kembali' => 'Menunggu',
+                    'terlambat' => 'Terlambat',
+                ],
+            ],
+        ]" />
 
         <!-- TABLE -->
         <section class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col min-h-[500px]">
@@ -59,7 +54,8 @@
                 <div class="min-w-[1200px]">
 
                     <!-- HEADER -->
-                    <div class="sticky top-0 z-10 grid 
+                    <div
+                        class="sticky top-0 z-10 grid 
                         grid-cols-[80px_200px_160px_120px_120px_120px_120px_120px_120px]
                         bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
 
@@ -79,7 +75,8 @@
 
                         @if ($data->count())
                             @foreach ($data as $item)
-                                <div class="grid 
+                                <div
+                                    class="grid 
                                     grid-cols-[80px_200px_160px_120px_120px_120px_120px_120px_120px]
                                     items-center px-8 py-4 border-b text-sm w-full
                                     hover:bg-gray-50 transition
@@ -145,9 +142,11 @@
                                     <!-- AKSI -->
                                     <div class="text-center">
                                         @if (in_array($item->status, ['menunggu_kembali', 'terlambat']))
-                                            <form action="{{ route('pengembalian.confirm', $item->id) }}" method="POST">
+                                            <form action="{{ route('pengembalian.confirm', $item->id) }}"
+                                                method="POST">
                                                 @csrf
-                                                <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                                                <button
+                                                    class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                                                     Konfirmasi
                                                 </button>
                                             </form>
@@ -164,6 +163,11 @@
 
                     </div>
 
+                </div>
+            </div>
+            <div class="p-4 bg-white border-t border-gray-50">
+                <div>
+                    {{ $data->links() }}
                 </div>
             </div>
 

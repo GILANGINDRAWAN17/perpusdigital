@@ -64,23 +64,19 @@
         </header>
 
 
-        <div class="flex gap-4 mb-10">
-            <div class="relative flex-1 max-w-md shadow-sm">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
-                <input type="text" placeholder="Cari buku..."
-                    class="w-full pl-12 pr-4 py-3.5 rounded-xl border-none focus:ring-2 focus:ring-[#004d4d] outline-none">
-            </div>
-
-            <button
-                class="bg-[#004d4d] px-6 py-3.5 rounded-xl text-white font-semibold shadow-sm flex items-center gap-2 hover:brightness-105 transition">
-                Status <i data-lucide="chevron-down" class="w-4 h-4"></i>
-            </button>
-
-            <button
-                class="bg-[#004d4d] px-10 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#003d3d] transition">
-                Cari
-            </button>
-        </div>
+        <x-filter-bar action="{{ route('riwayat') }}" :filters="[
+            [
+                'name' => 'status',
+                'label' => 'Status',
+                'options' => [
+                    'pending' => 'Pending',
+                    'dipinjam' => 'Dipinjam',
+                    'menunggu_kembali' => 'Menunggu',
+                    'terlambat' => 'Terlambat',
+                    'selesai' => 'Selesai',
+                ],
+            ],
+        ]" />
 
         <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[300px]">
 
@@ -90,12 +86,11 @@
 
             <div class="flex-1 flex flex-col">
                 <div
-                    class="grid grid-cols-[80px_1fr_120px_120px_120px_120px_120px] bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
+                    class="grid grid-cols-[80px_1fr_120px_120px_120px_120px] bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
                     <div>Cover</div>
                     <div>Judul</div>
                     <div>Pinjam</div>
                     <div>Jatuh Tempo</div>
-                    <div>Kembali</div>
                     <div>Status</div>
                     <div>Aksi</div>
                 </div>
@@ -108,7 +103,7 @@
                     @if ($dipinjam->count())
                         @foreach ($dipinjam as $item)
                             <div
-                                class="grid grid-cols-[80px_1fr_120px_120px_120px_120px_120px] items-center px-8 py-4 border-b text-sm w-full">
+                                class="grid grid-cols-[80px_1fr_120px_120px_120px_120px] items-center px-8 py-4 border-b text-sm w-full">
 
                                 {{-- COVER --}}
                                 <div class="flex justify-center">
@@ -129,10 +124,7 @@
                                     {{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}
                                 </div>
 
-                                {{-- KEMBALI --}}
-                                <div class="truncate flex justify-center">
-                                    {{ \Carbon\Carbon::parse($item->tanggal_kembali)->format('d M Y') }}
-                                </div>
+                               
 
                                 {{-- STATUS --}}
                                 <div class="truncate flex justify-center">
@@ -185,7 +177,7 @@
         </section>
 
         <section
-            class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[400px] mt-10">
+            class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[300px] mt-10">
 
             <div class="px-8 py-5 border-b border-gray-100">
                 <h3 class="font-semibold text-slate-700 text-md">Dikembalikan</h3>
@@ -205,7 +197,7 @@
 
                 <div class="flex-1 flex flex-col items-center justify-center">
                     @php
-                        $selesai = $data->where('status', 'selesai');
+                        $selesai = $dikembalikan;
                     @endphp
 
                     @if ($selesai->count())
@@ -262,6 +254,11 @@
             </div>
 
 
+            <div class="p-4 bg-white border-t border-gray-50">
+                <div>
+                    {{ $dikembalikan->links() }}
+                </div>
+            </div>
         </section>
     </main>
 
@@ -300,7 +297,7 @@
     <script>
         // Inisialisasi Lucide Icons
         lucide.createIcons();
-        
+
         function openDenda(denda) {
             const modal = document.getElementById('modalDenda');
             const box = document.getElementById('modalBoxDenda');

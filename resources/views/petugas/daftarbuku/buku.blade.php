@@ -24,31 +24,26 @@
 
         </header>
 
-        <div class="flex justify-between items-center mb-10">
+        <div class="flex justify-between items-start gap-4">
 
             <!-- KIRI -->
-            <div class="flex items-center gap-3 flex-1">
-                <div class="relative flex-1 max-w-sm shadow-sm">
-                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
-                    <input type="text" placeholder="Cari buku..."
-                        class="w-full pl-12 pr-4 py-3.5 rounded-xl border-none focus:ring-2 focus:ring-[#004d4d] outline-none">
-                </div>
-
-                <button
-                    class="bg-[#004d4d] p-3.5 rounded-xl text-white shadow-sm hover:bg-[#003d3d] transition-all duration-300">
-                    <i data-lucide="list-filter" class="w-6 h-6"></i>
-                </button>
-
-                <button
-                    class="bg-[#004d4d] px-8 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
-                    Cari
-                </button>
+            <div class="flex-1 max-w-xl">
+                <x-filter-bar action="{{ route('buku.index') }}" :filters="[
+                    [
+                        'name' => 'status',
+                        'label' => 'Status',
+                        'options' => [
+                            'tersedia' => 'Tersedia',
+                            'habis' => 'Habis',
+                        ],
+                    ],
+                ]" />
             </div>
 
             <!-- KANAN -->
             @if (Auth::user()->role === 'petugas')
                 <a href="{{ route('buku.create') }}"
-                    class="bg-[#004d4d] text-white px-6 py-3.5 rounded-lg font-semibold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
+                    class="bg-[#004d4d] text-white px-6 py-3.5 rounded-xl font-semibold shadow-sm hover:bg-[#003d3d] transition-all duration-300 whitespace-nowrap">
                     + Tambah Buku
                 </a>
             @endif
@@ -69,7 +64,7 @@
                 <table class="min-w-full text-sm">
 
                     <!-- THEAD -->
-                    <thead class="bg-[#004d4d] text-white">
+                    <thead class="bg-[#004d4d] py-3 text-white">
                         <tr class="text-center">
                             <th class="p-3">No</th>
                             <th class="p-3">Kode Buku</th>
@@ -86,7 +81,8 @@
                     <tbody>
                         @forelse ($buku as $item)
                             <tr class="border-b hover:bg-gray-100 text-center">
-                                <td class="p-3">{{ $loop->iteration }}</td>
+                                <td class="p-3">
+                                    {{ ($buku->currentPage() - 1) * $buku->perPage() + $loop->iteration }}</td>
 
                                 <td class="p-3 font-semibold">{{ $item->kode_buku }}</td>
                                 <td class="p-3">

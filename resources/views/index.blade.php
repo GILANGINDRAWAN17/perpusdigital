@@ -41,8 +41,6 @@
     <div id="container"
         class="w-full max-w-6xl h-[630px] bg-[#004d4d] scale-90 flex rounded-2xl shadow-2xl overflow-hidden relative">
 
-
-
         <!-- LEFT SIDE -->
         <div id="leftPanel" class="w-1/2 p-12 text-white transition-all duration-700 ease-in-out scale-100 opacity-100">
 
@@ -149,17 +147,25 @@
     <script>
         lucide.createIcons();
 
+        const loginUrl = "{{ route('login.post') }}";
+        const registerUrl = "/register";
+
         let isRegister = false;
 
         function togglePanel() {
             const form = document.getElementById("authForm");
+            form.action = loginUrl;
 
             if (!isRegister) {
-                form.action = "/register"; // pindah ke register
+                form.action = registerUrl;
             } else {
-                form.action = "/login"; // balik ke login
+                form.action = loginUrl;
             }
 
+            const tokenInput = document.querySelector('input[name="_token"]');
+            if (tokenInput) {
+                tokenInput.value = "{{ csrf_token() }}";
+            }
 
             const left = document.getElementById("leftPanel");
             const right = document.getElementById("rightPanel");

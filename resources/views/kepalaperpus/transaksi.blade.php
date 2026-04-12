@@ -32,32 +32,33 @@
 
         </header>
 
-        <div class="flex justify-between items-center mb-10">
+        <div class="flex justify-between items-start">
 
             <!-- KIRI -->
-            <div class="flex items-center gap-3 flex-1">
-                <button
-                    class="bg-white px-6 py-3.5 rounded-xl text-[#003d3d] font-semibold shadow-sm flex items-center gap-2 hover:brightness-105 transition">
-                    Konfirmasi Pengajuan <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </button>
-
-                <button
-                    class="bg-white px-6 py-3.5 rounded-xl text-[#003d3d] font-semibold shadow-sm flex items-center gap-2 hover:brightness-105 transition">
-                    Semua <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </button>
-
-                <button
-                    class="bg-[#004d4d] px-8 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
-                    Terapkan
-                </button>
+            <div class="flex items-start gap-3 flex-1">
+                <x-filter-bar action="{{ route('transaksi') }}" :filters="[
+                    [
+                        'name' => 'status',
+                        'label' => 'Status',
+                        'options' => [
+                            'pending' => 'Pending',
+                            'dipinjam' => 'Dipinjam',
+                            'menunggu_kembali' => 'Menunggu',
+                            'terlambat' => 'Terlambat',
+                            'selesai' => 'Selesai',
+                        ],
+                    ],
+                ]" />
             </div>
 
             <!-- KANAN -->
-            <a href="{{ route('buku.create') }}"
-                class="bg-[#004d4d] text-white px-6 py-3.5 rounded-lg font-semibold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
-                Export PDF
-            </a>
+            <a href="{{ route('transaksi.export') }}" target="_blank"
+                class="bg-[#004d4d] text-white px-6 py-3.5 rounded-lg font-semibold shadow-sm 
+                        hover:bg-[#003d3d] transition-all duration-300 inline-flex items-center gap-2">
+                <i data-lucide="file-down" class="w-5 h-5"></i>
+                <span>Export PDF</span>
 
+            </a>
         </div>
 
         <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[300px]">
@@ -68,9 +69,9 @@
 
             <div class="flex-1 flex flex-col overflow-x-auto">
                 <div
-                    class="grid grid-cols-[100px_120px_2fr_1.5fr_1.5fr_2fr_1fr] w-full items-center py-3 px-6 bg-[#004d4d] font-bold text-sm text-center text-white">
+                    class="grid grid-cols-[100px_200px_2fr_1.5fr_1.5fr_2.5fr_1fr] w-full items-center py-3 px-6 bg-[#004d4d] font-bold text-sm text-center text-white">
                     <div>Kode</div>
-                    <div>NIK/NIS</div>
+                    <div>Judul Buku</div>
                     <div>Peminjam</div>
                     <div>Pinjam</div>
                     <div>Jatuh Tempo</div>
@@ -83,14 +84,18 @@
                     @if ($data->count())
                         @foreach ($data as $item)
                             <div
-                                class="grid grid-cols-[100px_120px_2fr_1.5fr_1.5fr_2fr_1fr] 
+                                class="grid grid-cols-[100px_200px_2fr_1.5fr_1.5fr_2.5fr_1fr] 
                                        w-full items-center py-4 px-6 border-b text-sm text-center">
 
                                 {{-- KODE --}}
-                                <div class="truncate flex justify-center">{{ $item->buku->kode_buku ?? '-' }}</div>
+                                <div class="truncate flex justify-center">
+                                    {{ $item->buku->kode_buku ?? '-' }}
+                                </div>
 
-                                {{-- NIK / NIS --}}
-                                <div class="truncate flex justify-center">{{ $item->user->nik_nis ?? '-' }}</div>
+                                {{-- JUDUL BUKU --}}
+                                <div class="truncate flex justify-center">
+                                    {{ $item->buku->judul_buku ?? '-' }}
+                                </div>
 
                                 {{-- PEMINJAM --}}
                                 <div class="truncate flex justify-center">

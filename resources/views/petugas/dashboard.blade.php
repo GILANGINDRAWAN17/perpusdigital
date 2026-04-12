@@ -84,14 +84,14 @@
 
         </div>
 
-        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[400px]">
+        <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[300px]">
 
             <div class="px-8 py-5 border-b border-gray-100">
                 <h3 class="font-semibold text-slate-700 text-md">Pengajuan Terbaru</h3>
             </div>
 
             <div class="flex-1 flex flex-col">
-                <div class="grid grid-cols-4 bg-[#004d4d] py-4 px-8 text-white font-bold text-center text-sm">
+                <div class="grid grid-cols-4 bg-[#004d4d] py-3 px-8 text-white font-bold text-center text-sm">
                     <div>Jumlah Buku</div>
                     <div>Nama Anggota</div>
                     <div>Tanggal Pinjam</div>
@@ -121,6 +121,12 @@
                             Tidak ada pengajuan
                         </div>
                     @endforelse
+                </div>
+            </div>
+
+            <div class="p-4 bg-white border-t border-gray-50">
+                <div>
+                     {{ $pengajuanTerbaru->links() }}
                 </div>
             </div>
         </section>

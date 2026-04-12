@@ -20,8 +20,6 @@
 
 <body class="bg-[#E2EDED] min-h-screen flex">
 
-
-
     @include('layout.sidebar')
 
     <main class="flex-1 p-8 overflow-y-auto">
@@ -64,24 +62,21 @@
                 </div>
             </div>
         </header>
-
-        <div class="flex gap-4 mb-10">
-            <div class="relative flex-1 max-w-sm shadow-sm">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
-                <input type="text" placeholder="Cari buku..."
-                    class="w-full pl-12 pr-4 py-3.5 rounded-xl border-none focus:ring-2 focus:ring-[#004d4d] outline-none">
-            </div>
-            <button
-                class="bg-[#004d4d] p-3.5 rounded-xl text-white shadow-sm hover:bg-[#003d3d] transition-all duration-300">
-                <i data-lucide="list-filter" class="w-6 h-6"></i>
-            </button>
-            <button
-                class="bg-[#004d4d] px-10 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
-                Cari
-            </button>
-        </div>
-
+        <x-filter-bar action="/katalog" :filters="[
+            [
+                'name' => 'status',
+                'label' => 'Status',
+                'options' => [
+                    'tersedia' => 'Tersedia',
+                    'habis' => 'Habis',
+                ],
+            ],
+        ]" />
         <section class="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/50">
+
+            <div class="mb-6 text-sm text-gray-500">
+                Menampilkan {{ $buku->firstItem() }} - {{ $buku->lastItem() }} dari {{ $buku->total() }} buku
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
@@ -156,13 +151,14 @@
             </div>
             <div class="p-4 bg-white border-t border-gray-50">
                 <div>
-                    {{ $data->links() }}
+                    {{ $buku->links() }}
                 </div>
             </div>
         </section>
 
     </main>
 
+   
     @include('layout.notifikasi')
     @include('layout.toast')
 

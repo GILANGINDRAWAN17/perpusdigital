@@ -81,11 +81,97 @@
             </div>
 
         </div>
+        <div class="bg-white rounded-2xl shadow-md border p-6">
+            <div class="flex justify-between items-center mb-4">
+
+                <h3 class="text-md font-semibold text-slate-700">
+                    Grafik Peminjaman Buku
+                </h3>
+
+                <form method="GET" class="flex">
+                    <div class="relative">
+                        <select name="tahun" onchange="this.form.submit()"
+                            class="appearance-none border border-gray-300 rounded-lg px-3 py-2 pr-10 text-sm
+                            focus:ring-2 focus:ring-[#004d4d] outline-none">
+
+                            @foreach ($listTahun as $t)
+                                <option value="{{ $t }}" {{ $tahun == $t ? 'selected' : '' }}>
+                                    {{ $t }}
+                                </option>
+                            @endforeach
+
+                        </select>
+
+                        <!-- ICON PANAH -->
+                        <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                            <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <canvas id="chartPeminjaman" height="100"></canvas>
+        </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         // Inisialisasi Lucide Icons
         lucide.createIcons();
+
+
+        const ctx = document.getElementById('chartPeminjaman');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                datasets: [{
+                    label: 'Jumlah Peminjaman',
+                    data: @json($chartData),
+
+                    borderWidth: 3,
+                    tension: 0.4, // 🔥 smooth curve
+                    fill: true,
+                    backgroundColor: 'rgba(0, 77, 77, 0.1)',
+                    borderColor: '#004d4d',
+                    pointBackgroundColor: '#004d4d',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+
+                animation: {
+                    duration: 1200,
+                    easing: 'easeInOutQuart'
+                },
+
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
     </script>
 </body>
 

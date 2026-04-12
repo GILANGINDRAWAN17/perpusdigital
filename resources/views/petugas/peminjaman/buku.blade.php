@@ -33,23 +33,16 @@
         </header>
 
 
-        <div class="flex gap-4 mb-10">
-            <div class="relative flex-1 max-w-xs">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
-                <input type="text" placeholder="Cari pinjaman buku..."
-                    class="w-full pl-12 pr-4 py-3.5 rounded-xl border-none focus:ring-2 focus:ring-[#004d4d] outline-none shadow-md">
-            </div>
-
-            <button
-                class="bg-[#004d4d] px-6 py-3.5 rounded-xl text-white font-semibold shadow-sm flex items-center gap-2 hover:brightness-105 transition">
-                Status <i data-lucide="chevron-down" class="w-4 h-4"></i>
-            </button>
-
-            <button
-                class="bg-[#004d4d] px-10 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
-                Cari
-            </button>
-        </div>
+        <x-filter-bar action="{{ route('peminjaman') }}" :filters="[
+            [
+                'name' => 'status',
+                'label' => 'Status',
+                'options' => [
+                    'pending' => 'Pending',
+                    'dipinjam' => 'Dipinjam',
+                ],
+            ],
+        ]" />
 
         <section class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col min-h-[400px]">
 
@@ -105,7 +98,9 @@
                                 </div>
 
                                 {{-- KEMBALI --}}
-                                <div>{{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}</div>
+                                <div>
+                                    {{ $item->tanggal_kembali ? \Carbon\Carbon::parse($item->tanggal_kembali)->format('d M Y') : '-' }}
+                                </div>
 
                                 {{-- STATUS --}}
                                 <div>
@@ -148,6 +143,11 @@
                             <p class="text-gray-500">Belum ada data peminjaman</p>
                         </div>
                     @endif
+                </div>
+            </div>
+            <div class="p-4 bg-white border-t border-gray-50">
+                <div>
+                    {{ $data->links() }}
                 </div>
             </div>
 

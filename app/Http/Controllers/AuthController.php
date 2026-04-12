@@ -13,7 +13,24 @@ class AuthController extends Controller
 {
     public function indexLogin()
     {
-        return view('index');
+        if (Auth::check()) {
+
+            $role = Auth::user()->role;
+
+            if ($role === 'anggota') {
+                return redirect()->route('dashboard.anggota');
+            } elseif ($role === 'petugas') {
+                return redirect()->route('dashboard.petugas');
+            } elseif ($role === 'kepala_perpustakaan') {
+                return redirect()->route('dashboard.kepala');
+            }
+        }
+
+        return response()
+            ->view('index')
+            ->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Sat, 01 Jan 1990 00:00:00 GMT');
     }
 
     public function masuk(Request $request)
@@ -41,13 +58,22 @@ class AuthController extends Controller
 
         Auth::login($user);
 
+
+        $request->session()->regenerate();
+
+
         if ($user->role == 'anggota') {
-            return redirect('/dashboard')->with('success', 'Selamat datang, ' . $user->username);
+            return redirect()->route('dashboard.anggota')
+                ->with('success', 'Selamat datang, ' . $user->username);
         } elseif ($user->role == 'petugas') {
-            return redirect('/dashboardpetugas')->with('success', 'Selamat datang, ' . $user->username);
+            return redirect()->route('dashboard.petugas')
+                ->with('success', 'Selamat datang, ' . $user->username);
         } elseif ($user->role == 'kepala_perpustakaan') {
-            return redirect('/dashboardkepalaperpus')->with('success', 'Selamat datang, ' . $user->username);
+            return redirect()->route('dashboard.kepala')
+                ->with('success', 'Selamat datang, ' . $user->username);
         }
+
+        return redirect('/');
     }
 
     public function daftar(Request $request)
@@ -93,6 +119,10 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login')->withHeaders([
+            'Cache-Control' => 'no-cache, no-store, max-age=0, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => 'Sat, 01 Jan 1990 00:00:00 GMT',
+        ]);
     }
 }

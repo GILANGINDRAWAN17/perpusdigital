@@ -75,7 +75,7 @@
         <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 overflow-hidden mb-6">
             <div class="bg-[#004d4d] px-6 py-3 flex justify-between items-center text-white font-bold">
                 Informasi Profil
-                <i data-lucide="file-edit" class="w-5 h-5 cursor-pointer hover:scale-110 transition"></i>
+                <i data-lucide="file-edit" onclick="openEditProfileModal()" class="w-5 h-5 cursor-pointer hover:scale-110 transition"></i>
             </div>
             <div class="p-8 space-y-6">
                 <div class="flex">

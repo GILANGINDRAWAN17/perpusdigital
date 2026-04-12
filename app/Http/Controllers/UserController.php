@@ -10,12 +10,29 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = \App\Models\User::paginate(5);
+        $query = User::query();
+
+        // SEARCH
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('username', 'like', '%' . $request->search . '%')
+                    ->orWhere('nama_lengkap', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // FILTER ROLE
+        if ($request->role) {
+            $query->where('role', $request->role);
+        }
+
+        $users = $query->paginate(5)->withQueryString();
+
         return view('kepalaperpus.daftaruser.user', compact('users'));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -42,7 +59,7 @@ class UserController extends Controller
         \App\Models\User::create([
             'username' => $request->username,
             'email' => $request->email,
-            'password' => bcrypt($request->password), 
+            'password' => bcrypt($request->password),
             'nama_lengkap' => $request->nama_lengkap,
             'no_telp' => $request->no_telp,
             'nik_nis' => $request->nik_nis,
@@ -79,8 +96,8 @@ class UserController extends Controller
             'username' => 'required|unique:users,username,' . $id,
             'email' => 'required|email|unique:users,email,' . $id,
             'nama_lengkap' => 'required',
-            'no_telp' => 'nullable|numeric',
-            'nik_nis' => 'nullable|numeric|min:5',
+            'no_telp' => 'nullable|numeric|digits_between:10,15',
+            'nik_nis' => 'nullable|numeric|min:5|digits_between:8,20',
             'role' => 'required',
         ], [
             'no_telp.numeric' => 'Nomor telepon harus berupa angka',

@@ -7,8 +7,17 @@
         const toast = document.createElement('div');
 
         let bg = 'bg-green-100 text-green-700';
-        if (type === 'error') bg = 'bg-red-100 text-red-700';
-        if (type === 'warning') bg = 'bg-yellow-100 text-yellow-700';
+        let icon = 'check-circle';
+
+        if (type === 'error') {
+            bg = 'bg-red-100 text-red-700';
+            icon = 'x-circle';
+        }
+
+        if (type === 'warning') {
+            bg = 'bg-yellow-100 text-yellow-700';
+            icon = 'alert-circle';
+        }
 
         toast.className = `
             px-6 py-4 rounded-xl shadow-lg font-semibold
@@ -16,9 +25,17 @@
             ${bg}
         `;
 
-        toast.innerText = message;
+        // ✅ PINDAH KE SINI (DALAM FUNCTION)
+        toast.innerHTML = `
+            <div class="flex items-center gap-2">
+                <i data-lucide="${icon}" class="w-5 h-5"></i>
+                <span>${message}</span>
+            </div>
+        `;
 
         container.appendChild(toast);
+
+        lucide.createIcons();
 
         // animasi masuk
         setTimeout(() => {
@@ -31,18 +48,10 @@
             toast.style.transform = 'translateY(-20px)';
         }, 3000);
 
-        // hapus dari DOM
         setTimeout(() => {
             toast.remove();
         }, 3500);
     }
-
-    toast.innerHTML =
-        `<div class="flex items-center gap-2">
-        <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : 'alert-circle'}" class="w-5 h-5"></i>
-        <span>${message}</span>
-    </div>`;
-    lucide.createIcons();
 </script>
 
 @if (session('success'))

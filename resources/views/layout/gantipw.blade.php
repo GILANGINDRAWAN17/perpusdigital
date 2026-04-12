@@ -1,8 +1,7 @@
 <script>
-        
-        function openEditProfileModal() {
+    function openEditProfileModal() {
 
-            const formHtml = `
+        const formHtml = `
         <form id="formEditProfile" method="POST" action="{{ route('profile.update') }}" class="w-full text-left">
             @csrf
             @method('PUT')
@@ -16,34 +15,36 @@
 
             <div class="mb-3">
                 <label class="text-sm text-slate-600">NIK/NIS</label>
-                <input type="text" name="nik_nis"
+                <input type="text" name="nik_nis" inputmode="numeric" pattern="[0-9]*"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                     value="{{ Auth::user()->nik_nis }}"
                     class="w-full border border-gray-300 p-2 rounded mt-1 focus:ring-2 focus:ring-[#004d4d] outline-none">
             </div>
 
             <div class="mb-3">
                 <label class="text-sm text-slate-600">No Telepon</label>
-                <input type="text" name="no_telp"
+                <input type="text" name="no_telp" inputmode="numeric" pattern="[0-9]*"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                     value="{{ Auth::user()->no_telp }}"
                     class="w-full border border-gray-300 p-2 rounded mt-1 focus:ring-2 focus:ring-[#004d4d] outline-none">
             </div>
         </form>
     `;
 
-            openModal(
-                "Edit Informasi Profil",
-                formHtml,
-                () => {
-                    document.getElementById('formEditProfile').submit();
-                }
-            );
-        }
+        openModal(
+            "Edit Informasi Profil",
+            formHtml,
+            () => {
+                document.getElementById('formEditProfile').submit();
+            }
+        );
+    }
 
 
 
-        function openChangePasswordModal() {
+    function openChangePasswordModal() {
 
-            const formHtml = `
+        const formHtml = `
         <form id="formChangePassword" class="w-full text-left space-y-3">
 
             <div>
@@ -122,86 +123,86 @@
         </form>
     `;
 
-            openModal("Ganti Password", formHtml, submitChangePassword);
+        openModal("Ganti Password", formHtml, submitChangePassword);
 
-            // ubah tombol
-            document.getElementById('confirmBtn').innerText = 'Simpan';
+        // ubah tombol
+        document.getElementById('confirmBtn').innerText = 'Simpan';
+    }
+
+    function togglePassword(id, el) {
+        const input = document.getElementById(id);
+
+        const eyeOpen = el.querySelector('.eye-open');
+        const eyeClose = el.querySelector('.eye-close');
+
+        if (input.type === "password") {
+            input.type = "text";
+            eyeOpen.classList.add('hidden');
+            eyeClose.classList.remove('hidden');
+        } else {
+            input.type = "password";
+            eyeOpen.classList.remove('hidden');
+            eyeClose.classList.add('hidden');
         }
+    }
 
-        function togglePassword(id, el) {
-            const input = document.getElementById(id);
+    function submitChangePassword() {
 
-            const eyeOpen = el.querySelector('.eye-open');
-            const eyeClose = el.querySelector('.eye-close');
+        // reset error
+        document.querySelectorAll('[id^="err_"]').forEach(e => {
+            e.classList.add('hidden');
+            e.innerText = '';
+        });
 
-            if (input.type === "password") {
-                input.type = "text";
-                eyeOpen.classList.add('hidden');
-                eyeClose.classList.remove('hidden');
-            } else {
-                input.type = "password";
-                eyeOpen.classList.remove('hidden');
-                eyeClose.classList.add('hidden');
-            }
-        }
+        const data = {
+            current_password: document.getElementById('current_password').value,
+            new_password: document.getElementById('new_password').value,
+            new_password_confirmation: document.getElementById('confirm_password').value,
+            _token: '{{ csrf_token() }}'
+        };
 
-        function submitChangePassword() {
+        fetch("{{ route('password.update') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => {
 
-            // reset error
-            document.querySelectorAll('[id^="err_"]').forEach(e => {
-                e.classList.add('hidden');
-                e.innerText = '';
+                // kalau error validasi
+                if (res.errors) {
+                    if (res.errors.current_password) {
+                        showError('err_current', res.errors.current_password[0]);
+                    }
+                    if (res.errors.new_password) {
+                        showError('err_new', res.errors.new_password[0]);
+                    }
+                    if (res.errors.new_password_confirmation) {
+                        showError('err_confirm', res.errors.new_password_confirmation[0]);
+                    }
+                    return;
+                }
+
+                // kalau password salah
+                if (res.error) {
+                    showError('err_current', res.error);
+                    return;
+                }
+
+                // SUCCESS 🔥
+                closeModal();
+
+                window.showToast("Password berhasil diubah", "success");
+
             });
+    }
 
-            const data = {
-                current_password: document.getElementById('current_password').value,
-                new_password: document.getElementById('new_password').value,
-                new_password_confirmation: document.getElementById('confirm_password').value,
-                _token: '{{ csrf_token() }}'
-            };
-
-            fetch("{{ route('password.update') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(res => res.json())
-                .then(res => {
-
-                    // kalau error validasi
-                    if (res.errors) {
-                        if (res.errors.current_password) {
-                            showError('err_current', res.errors.current_password[0]);
-                        }
-                        if (res.errors.new_password) {
-                            showError('err_new', res.errors.new_password[0]);
-                        }
-                        if (res.errors.new_password_confirmation) {
-                            showError('err_confirm', res.errors.new_password_confirmation[0]);
-                        }
-                        return;
-                    }
-
-                    // kalau password salah
-                    if (res.error) {
-                        showError('err_current', res.error);
-                        return;
-                    }
-
-                    // SUCCESS 🔥
-                    closeModal();
-
-                   window.showToast("Password berhasil diubah", "success");
-
-                });
-        }
-
-        function showError(id, msg) {
-            const el = document.getElementById(id);
-            el.innerText = msg;
-            el.classList.remove('hidden');
-        }
-    </script>
+    function showError(id, msg) {
+        const el = document.getElementById(id);
+        el.innerText = msg;
+        el.classList.remove('hidden');
+    }
+</script>

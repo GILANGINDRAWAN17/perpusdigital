@@ -3,145 +3,161 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\anggota;
-use App\Http\Middleware\kepalaperpustakaan;
-use App\Http\Middleware\petugas;
-use App\Http\Middleware\petugasdankepala;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| PUBLIC
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('index');
 });
 
-//LOGIN & REGISTER
-Route::get('/login', [AuthController::class, 'indexLogin']);
-Route::post('/login', [AuthController::class, 'masuk']);
+Route::get('/login', [AuthController::class, 'indexLogin'])
+    ->name('login')
+    ->middleware('guest');
+Route::post('/login', [AuthController::class, 'masuk'])->name('login.post');
 Route::post('/register', [AuthController::class, 'daftar']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-//ANGGOTA
-Route::get('/dashboard', [BukuController::class, 'dashboardAnggota'])
-    ->middleware(anggota::class)
-    ->name('dashboard.anggota');
+/*
+|--------------------------------------------------------------------------
+| AUTH (SEMUA HARUS LOGIN)
+|--------------------------------------------------------------------------
+*/
 
-Route::get('/katalog', [
-    BukuController::class,
-    'katalog'
-])->middleware(anggota::class);
+Route::middleware('auth')->group(function () {
 
-Route::post('/pinjam/{id}', [BukuController::class, 'pinjam'])
-    ->middleware(anggota::class)
-    ->name('pinjam.buku');
+    /*
+    |--------------------------------------------------------------------------
+    | ANGGOTA
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('role:anggota')->group(function () {
 
-Route::post('/kembalikan/{id}', [BukuController::class, 'kembalikan'])
-    ->middleware(anggota::class)
-    ->name('kembalikan.buku');
+        Route::get('/dashboard', [BukuController::class, 'dashboardAnggota'])
+            ->name('dashboard.anggota');
 
-Route::get('/riwayat', [BukuController::class, 'riwayat'])
-    ->middleware(anggota::class)
-    ->name('riwayat');
+        Route::get('/katalog', [BukuController::class, 'katalog']);
 
-Route::get('/profile', function () {
-    return view('anggota.profile.profileanggota');
-})->middleware(anggota::class);
+        Route::post('/pinjam/{id}', [BukuController::class, 'pinjam'])
+            ->name('pinjam.buku');
 
-Route::post('/profile/foto', [ProfileController::class, 'updateFoto'])
-    ->name('profile.foto');
+        Route::post('/kembalikan/{id}', [BukuController::class, 'kembalikan'])
+            ->name('kembalikan.buku');
 
-Route::put('/profile/update', [ProfileController::class, 'update'])
-    ->middleware(anggota::class)
-    ->name('profile.update');
+        Route::get('/riwayat', [BukuController::class, 'riwayat'])
+            ->name('riwayat');
 
-Route::post('/profile/password', [ProfileController::class, 'updatePassword'])
-    ->middleware(anggota::class)
-    ->name('password.update');
+        Route::get('/profile', function () {
+            return view('anggota.profile.profileanggota');
+        });
 
-Route::post('/notifikasi/{id}/read', function ($id) {
-    $notif = \App\Models\Notifikasi::findOrFail($id);
+        Route::put('/profile/update', [ProfileController::class, 'update'])
+            ->name('profile.update');
 
-    if ($notif->user_id != auth()->id()) {
-        abort(403);
-    }
-
-    $notif->update(['is_read' => true]);
-
-    return response()->json(['success' => true]);
-})->name('notifikasi.read');
-
-Route::get('/notifikasi/data', function () {
-    return \App\Models\Notifikasi::where('user_id', auth()->id())
-        ->latest()
-        ->take(5)
-        ->get();
-})->middleware('auth');
+        Route::post('/profile/password', [ProfileController::class, 'updatePassword'])
+            ->name('password.update');
+    });
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | PETUGAS
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('role:petugas')->group(function () {
 
-//KEPALA PERPUSTAKAAN
-Route::get('/dashboardkepalaperpus', [BukuController::class, 'dashboardKepala'])
-    ->middleware(kepalaperpustakaan::class)
-    ->name('dashboard.kepala');
+        Route::get('/dashboardpetugas', [BukuController::class, 'dashboardPetugas'])
+            ->name('dashboard.petugas');
 
-Route::get('/transaksi', [BukuController::class, 'transaksi'])->name('transaksi');
+        Route::post('/peminjaman/{id}/approve', [BukuController::class, 'approve'])
+            ->name('peminjaman.approve');
 
-Route::get('/daftaruser', [
-    UserController::class,
-    'index'
-])->middleware(kepalaperpustakaan::class);
+        Route::post('/peminjaman/{id}/tolak', [BukuController::class, 'tolak'])
+            ->name('peminjaman.tolak');
 
-Route::get('/profilekepala', function () {
-    return view('kepalaperpus.profile.profilekepalaperpus');
-})->middleware(kepalaperpustakaan::class);
+        Route::post('/pengembalian/{id}/confirm', [BukuController::class, 'confirmKembali'])
+            ->name('pengembalian.confirm');
 
-//Hanya dapat diakses oleh Kepala Perpus
-Route::middleware(['auth', 'role:kepala_perpustakaan'])->group(function () {
-    Route::resource('user', UserController::class);
+        Route::get('/peminjaman', [BukuController::class, 'peminjaman'])
+            ->name('peminjaman');
+
+        Route::get('/pengembalian', [BukuController::class, 'pengembalian'])
+            ->name('pengembalian');
+
+        Route::get('/profilepetugas', function () {
+            return view('petugas.profile.profilepetugas');
+        });
+
+        // CRUD Buku
+        Route::controller(BukuController::class)->group(function () {
+            Route::get('/buku', 'index')->name('buku.index');
+            Route::get('/buku/create', 'create')->name('buku.create');
+            Route::post('/buku', 'store')->name('buku.store');
+            Route::get('/buku/{buku}/edit', 'edit')->name('buku.edit');
+            Route::put('/buku/{buku}', 'update')->name('buku.update');
+            Route::delete('/buku/{buku}', 'destroy')->name('buku.destroy');
+        });
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | KEPALA PERPUSTAKAAN
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('role:kepala_perpustakaan')->group(function () {
+
+        Route::get('/dashboardkepalaperpus', [BukuController::class, 'dashboardKepala'])
+            ->name('dashboard.kepala');
+
+        Route::get('/transaksi', [BukuController::class, 'transaksi'])
+            ->name('transaksi');
+
+        Route::get('/transaksi/export-pdf', [BukuController::class, 'exportPdf'])
+            ->name('transaksi.export');
+
+        Route::get('/daftaruser', [UserController::class, 'index'])
+            ->name('user.index');
+
+        Route::resource('user', UserController::class);
+
+        Route::get('/profilekepala', function () {
+            return view('kepalaperpus.profile.profilekepalaperpus');
+        });
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | GLOBAL (SEMUA ROLE)
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post('/profile/foto', [ProfileController::class, 'updateFoto'])
+        ->name('profile.foto');
+
+    Route::post('/notifikasi/{id}/read', function ($id) {
+        $notif = \App\Models\Notifikasi::findOrFail($id);
+
+        if ($notif->user_id != auth()->id()) {
+            abort(403);
+        }
+
+        $notif->update(['is_read' => true]);
+
+        return response()->json(['success' => true]);
+    })->name('notifikasi.read');
+
+    Route::get('/notifikasi/data', function () {
+        return \App\Models\Notifikasi::where('user_id', auth()->id())
+            ->latest()
+            ->take(5)
+            ->get();
+    });
 });
-
-
-
-//PETUGAS
-Route::get('/dashboardpetugas', [BukuController::class, 'dashboardPetugas'])
-    ->middleware(petugas::class)
-    ->name('dashboard.petugas');
-
-// Approve peminjaman
-Route::post('/peminjaman/{id}/approve', [BukuController::class, 'approve'])
-    ->middleware(petugas::class)
-    ->name('peminjaman.approve');
-
-// Tolak peminjaman
-Route::post('/peminjaman/{id}/tolak', [BukuController::class, 'tolak'])
-    ->middleware(petugas::class)
-    ->name('peminjaman.tolak');
-
-// Konfirmasi pengembalian
-Route::post('/pengembalian/{id}/confirm', [BukuController::class, 'confirmKembali'])
-    ->middleware(petugas::class)
-    ->name('pengembalian.confirm');
-
-Route::get('/peminjaman', [BukuController::class, 'peminjaman'])
-    ->middleware(petugas::class);
-
-Route::get('/pengembalian', [BukuController::class, 'pengembalian'])
-    ->middleware(petugas::class);
-
-Route::get('/profilepetugas', function () {
-    return view('petugas.profile.profilepetugas');
-})->middleware(petugas::class);
-
-//Daftar buku, hanya dapat diakses oleh petugas dan kepala
-Route::get('/daftarbuku', [BukuController::class, 'index'])
-    ->middleware(petugasdankepala::class)
-    ->name('daftarbuku');
-
-Route::controller(BukuController::class)->group(function () {
-    Route::get('/buku', 'index')->name('buku.index');
-    Route::get('/buku/create', 'create')->name('buku.create');
-    Route::post('/buku', 'store')->name('buku.store');
-    Route::get('/buku/{buku}/edit', 'edit')->name('buku.edit');
-    Route::put('/buku/{buku}', 'update')->name('buku.update');
-    Route::delete('/buku/{buku}', 'destroy')->name('buku.destroy');
-})->middleware(petugas::class);

@@ -8,20 +8,58 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Peminjaman;
 use Carbon\Carbon;
 use App\Models\Notifikasi;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
+
 
 
 class BukuController extends Controller
 {
     public function index(Request $request)
     {
-        $buku = Buku::paginate(5);
+        $query = Buku::query();
+
+        // SEARCH
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('judul_buku', 'like', '%' . $request->search . '%')
+                    ->orWhere('penulis', 'like', '%' . $request->search . '%')
+                    ->orWhere('kode_buku', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // FILTER STATUS
+        if ($request->status == 'tersedia') {
+            $query->where('stock_buku', '>', 0);
+        } elseif ($request->status == 'habis') {
+            $query->where('stock_buku', '<=', 0);
+        }
+
+        $buku = $query->paginate(5)->withQueryString();
+
         return view('petugas.daftarbuku.buku', compact('buku'));
     }
 
 
-    public function katalog()
+    public function katalog(Request $request)
     {
-        $buku = Buku::paginate(4);
+        $query = Buku::query();
+
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('judul_buku', 'like', '%' . $request->search . '%')
+                    ->orWhere('penulis', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->status == 'tersedia') {
+            $query->where('stock_buku', '>', 0);
+        } elseif ($request->status == 'habis') {
+            $query->where('stock_buku', '<=', 0);
+        }
+
+        $buku = $query->paginate(4)->withQueryString();
+
         return view('anggota.daftarbuku.buku', compact('buku'));
     }
 
@@ -151,14 +189,34 @@ class BukuController extends Controller
         return back()->with('success', 'Pengajuan peminjaman berhasil');
     }
 
-    public function riwayat()
+    public function riwayat(Request $request)
     {
-        $data = Peminjaman::with('buku')
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->get();
+        $query = Peminjaman::with('buku')
+            ->where('user_id', auth()->id());
 
-        // AUTO UPDATE TERLAMBAT
+
+        if ($request->search) {
+            $query->whereHas('buku', function ($q) use ($request) {
+                $q->where('judul_buku', 'like', '%' . $request->search . '%');
+            });
+        }
+
+
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+
+        $data = $query->latest()->get();
+
+
+        $dikembalikan = (clone $query)
+            ->where('status', 'selesai')
+            ->latest()
+            ->paginate(5)
+            ->withQueryString();
+
+
         foreach ($data as $item) {
             if (
                 $item->status == 'dipinjam' &&
@@ -204,15 +262,33 @@ class BukuController extends Controller
             }
         }
 
-        return view('anggota.riwayat.pinjaman', compact('data', 'notifikasi'));
+        return view('anggota.riwayat.pinjaman', compact('data', 'dikembalikan', 'notifikasi'));
     }
 
-    public function peminjaman()
+
+    public function peminjaman(Request $request)
     {
-        $data = Peminjaman::with('buku', 'user')
-            ->whereIn('status', ['pending', 'dipinjam'])
-            ->latest()
-            ->get();
+        $query = Peminjaman::with('buku', 'user')
+            ->whereIn('status', ['pending', 'dipinjam']);
+
+        // SEARCH
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('buku', function ($q2) use ($request) {
+                    $q2->where('judul_buku', 'like', '%' . $request->search . '%');
+                })->orWhereHas('user', function ($q2) use ($request) {
+                    $q2->where('username', 'like', '%' . $request->search . '%');
+                });
+            });
+        }
+
+        // FILTER STATUS
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        // PAGINATION
+        $data = $query->latest()->paginate(5)->withQueryString();
 
         // AUTO TERLAMBAT
         foreach ($data as $item) {
@@ -237,12 +313,29 @@ class BukuController extends Controller
         return view('petugas.peminjaman.buku', compact('data'));
     }
 
-    public function pengembalian()
+    public function pengembalian(Request $request)
     {
-        $data = Peminjaman::with('buku', 'user')
-            ->whereIn('status', ['menunggu_kembali', 'terlambat'])
-            ->latest()
-            ->get();
+        $query = Peminjaman::with('buku', 'user')
+            ->whereIn('status', ['menunggu_kembali', 'terlambat']);
+
+
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('buku', function ($q2) use ($request) {
+                    $q2->where('judul_buku', 'like', '%' . $request->search . '%');
+                })->orWhereHas('user', function ($q2) use ($request) {
+                    $q2->where('username', 'like', '%' . $request->search . '%');
+                });
+            });
+        }
+
+
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+
+        $data = $query->latest()->paginate(5)->withQueryString();
 
         return view('petugas.pengembalian.buku', compact('data'));
     }
@@ -336,16 +429,32 @@ class BukuController extends Controller
         return back()->with('success', 'Pengembalian dikonfirmasi');
     }
 
-    public function transaksi()
+    public function transaksi(Request $request)
     {
-        $data = \App\Models\Peminjaman::with(['user', 'buku', 'petugas'])
-            ->latest()
-            ->paginate(5);
+        $query = \App\Models\Peminjaman::with(['user', 'buku', 'petugas']);
+
+        // SEARCH (opsional kalau mau dipakai dari filter bar)
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('buku', function ($q2) use ($request) {
+                    $q2->where('judul_buku', 'like', '%' . $request->search . '%');
+                })->orWhereHas('user', function ($q2) use ($request) {
+                    $q2->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                });
+            });
+        }
+
+        // FILTER STATUS
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->latest()->paginate(5)->withQueryString();
 
         return view('kepalaperpus.transaksi', compact('data'));
     }
 
-    public function dashboardKepala()
+    public function dashboardKepala(Request $request)
     {
         $totalBuku = \App\Models\Buku::count();
 
@@ -355,11 +464,42 @@ class BukuController extends Controller
 
         $jumlahAnggota = \App\Models\User::where('role', 'anggota')->count();
 
+        $tahun = $request->tahun ?? date('Y');
+        $bulan = $request->bulan;
+
+        $query = Peminjaman::select(
+            DB::raw('MONTH(tanggal_pinjam) as bulan'),
+            DB::raw('COUNT(*) as total')
+        )
+            ->whereYear('tanggal_pinjam', $tahun);
+
+        if ($bulan) {
+            $query->whereMonth('tanggal_pinjam', $bulan);
+        }
+
+        $dataChart = $query
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->pluck('total', 'bulan');
+
+        $chartData = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $chartData[] = $dataChart[$i] ?? 0;
+        }
+
+        $listTahun = Peminjaman::select(DB::raw('YEAR(tanggal_pinjam) as tahun'))
+            ->distinct()
+            ->pluck('tahun');
+
         return view('kepalaperpus.dashboard', compact(
             'totalBuku',
             'totalPeminjaman',
             'totalPengembalian',
-            'jumlahAnggota'
+            'jumlahAnggota',
+            'chartData',
+            'tahun',
+            'bulan',
+            'listTahun'
         ));
     }
 
@@ -377,12 +517,11 @@ class BukuController extends Controller
         // Total buku
         $totalBuku = Buku::count();
 
-        // Pengajuan terbaru (limit 5)
+        // Pengajuan terbaru (Tampilkan 3 data/page)
         $pengajuanTerbaru = Peminjaman::with('user', 'buku')
             ->where('status', 'pending')
             ->latest()
-            ->take(5)
-            ->get();
+            ->paginate(3);
 
         return view('petugas.dashboard', compact(
             'pengajuan',
@@ -437,5 +576,16 @@ class BukuController extends Controller
             'bukuDipinjam',
             'aktivitas'
         ));
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $data = \App\Models\Peminjaman::with(['user', 'buku', 'petugas'])
+            ->latest()
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.transaksi', compact('data'));
+
+        return $pdf->download('laporan-transaksi.pdf');
     }
 }

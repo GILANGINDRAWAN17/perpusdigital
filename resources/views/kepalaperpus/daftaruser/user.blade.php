@@ -31,25 +31,26 @@
             </div>
         </header>
 
-        <div class="flex justify-between items-center mb-10">
+        <div class="flex justify-between items-start">
 
             <!-- KIRI -->
-            <div class="flex items-center gap-3 flex-1">
-                <div class="relative flex-1 max-w-sm shadow-sm">
-                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
-                    <input type="text" placeholder="Cari User..."
-                        class="w-full pl-12 pr-4 py-3.5 rounded-xl border-none focus:ring-2 focus:ring-[#004d4d] outline-none">
-                </div>
-
-                <button
-                    class="bg-[#004d4d] px-8 py-3.5 rounded-xl text-white font-bold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
-                    Cari
-                </button>
+            <div class="flex items-start gap-3 flex-1">
+                <x-filter-bar action="{{ route('user.index') }}" placeholder="Cari user..." :filters="[
+                    [
+                        'name' => 'role',
+                        'label' => 'Role',
+                        'options' => [
+                            'anggota' => 'Anggota',
+                            'petugas' => 'Petugas',
+                            'kepala_perpustakaan' => 'Kepala',
+                        ],
+                    ],
+                ]" />
             </div>
 
             <!-- KANAN -->
             <a href="{{ route('user.create') }}"
-                class="bg-[#004d4d] text-white px-6 py-3.5 rounded-lg font-semibold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
+                class="bg-[#004d4d] text-white px-6 py-3.5 rounded-xl font-semibold shadow-sm hover:bg-[#003d3d] transition-all duration-300">
                 + Tambah User
             </a>
 
@@ -81,7 +82,12 @@
                     <div
                         class="grid grid-cols-[60px_120px_160px_200px_140px_140px_200px_140px] w-max items-center py-4 px-8 border-b text-center text-sm hover:bg-gray-50">
 
-                        <div>👤</div>
+                        <div class="flex justify-center">
+                            <div
+                                class="w-8 h-8 rounded-full bg-[#004d4d] text-white flex items-center justify-center text-sm font-bold">
+                                {{ strtoupper(substr($user->username, 0, 1)) }}
+                            </div>
+                        </div>
                         <div>{{ $user->username }}</div>
                         <div>{{ $user->nama_lengkap ?? '-' }}</div>
                         <div>{{ $user->email }}</div>
