@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        // Angota
+        // Anggota
         User::create([
            "username"   =>    "Gilanguno",
            "email"  =>    "gilang1@gmail.com",
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
            "password"=> bcrypt("12345678"),
            "role"   =>   "petugas"
         ]);
-        // kepala
+        // Kepala Perpus
         User::create([
            "username"   =>    "Gilangtrez",
            "email"  =>    "gilang3@gmail.com",

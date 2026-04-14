@@ -132,11 +132,22 @@
 
                             {{-- BUTTON --}}
                             @if ($item->stock_buku > 0)
-                                <button
-                                    onclick="openModal('Form Peminjaman', 'Silahkan pilih tanggal peminjaman', null, 'pinjam', {{ $item->id }})"
-                                    class="bg-[#004d4d] text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 hover:bg-[#003d3d] shadow-md shadow-[#004d4d]/20 transition-all duration-300">
-                                    Pinjam
-                                </button>
+                                @if ($dendaBelumBayar)
+                                    <button
+                                        class="bg-gray-400 text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 cursor-not-allowed">
+                                        Pinjam
+                                    </button>
+
+                                    <p class="text-red-500 text-xs mt-1 hover:underline">
+                                        Bayar denda terlebih dahulu
+                                    </p>
+                                @else
+                                    <button
+                                        onclick="openModal('Form Peminjaman', 'Silahkan pilih tanggal peminjaman', null, 'pinjam', {{ $item->id }})"
+                                        class="bg-[#004d4d] text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 hover:bg-[#003d3d] shadow-md shadow-[#004d4d]/20 transition-all duration-300">
+                                        Pinjam
+                                    </button>
+                                @endif
                             @else
                                 <button
                                     class="bg-gray-400 text-white text-xs font-black uppercase tracking-wider py-2.5 px-6 rounded-lg self-start mt-3 cursor-not-allowed">
@@ -158,7 +169,7 @@
 
     </main>
 
-   
+
     @include('layout.notifikasi')
     @include('layout.toast')
 

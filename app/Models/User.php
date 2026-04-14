@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+// Model untuk mengelola data user (login, role, dll)
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -51,6 +52,7 @@ class User extends Authenticatable
         ];
     }
 
+    // Relasi: satu user bisa punya banyak peminjaman
     public function peminjaman()
     {
         return $this->hasMany(Peminjaman::class);

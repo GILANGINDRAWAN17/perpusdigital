@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class BukuController extends Controller
 {
+    // Menampilkan daftar buku dengan fitur search dan filter status
     public function index(Request $request)
     {
         $query = Buku::query();
@@ -40,7 +41,7 @@ class BukuController extends Controller
         return view('petugas.daftarbuku.buku', compact('buku'));
     }
 
-
+    // Menampilkan katalog buku untuk anggota + cek apakah user punya denda
     public function katalog(Request $request)
     {
         $query = Buku::query();
@@ -58,18 +59,23 @@ class BukuController extends Controller
             $query->where('stock_buku', '<=', 0);
         }
 
+        $dendaBelumBayar = Peminjaman::where('user_id', auth()->id())
+            ->where('denda', '>', 0)
+            ->where('status_denda', 'belum_bayar')
+            ->exists();
+
         $buku = $query->paginate(4)->withQueryString();
 
-        return view('anggota.daftarbuku.buku', compact('buku'));
+        return view('anggota.daftarbuku.buku', compact('buku', 'dendaBelumBayar'));
     }
 
-
-
+    // Menampilkan halaman form tambah buku
     public function create()
     {
         return view('petugas.daftarbuku.tambahbuku');
     }
 
+    // Menyimpan data buku baru ke database (termasuk upload cover)
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -92,11 +98,13 @@ class BukuController extends Controller
         return redirect()->route('buku.index')->with('success', 'Data berhasil ditambahkan');
     }
 
+    // Menampilkan halaman edit buku
     public function edit(Buku $buku)
     {
         return view('petugas.daftarbuku.editbuku', ["buku" => $buku]);
     }
 
+    // Mengupdate data buku termasuk mengganti cover lama jika ada
     public function update(Request $request, Buku $buku)
     {
 
@@ -128,6 +136,7 @@ class BukuController extends Controller
             ->with('success', 'Buku "' . $buku->judul_buku . '" berhasil diperbarui');
     }
 
+    // Menghapus data buku beserta file cover dari storage
     public function destroy(Buku $buku)
     {
 
@@ -141,6 +150,7 @@ class BukuController extends Controller
     }
 
 
+    // Proses peminjaman buku dengan validasi (stok, batas 3 buku, denda, durasi)
     public function pinjam(Request $request, $id)
     {
         $request->validate([
@@ -160,6 +170,15 @@ class BukuController extends Controller
 
         if ($jumlah >= 3) {
             return back()->with('error', 'Maksimal hanya bisa meminjam 3 buku');
+        }
+
+        $dendaBelumBayar = Peminjaman::where('user_id', auth()->id())
+            ->where('denda', '>', 0)
+            ->where('status_denda', 'belum_bayar')
+            ->exists();
+
+        if ($dendaBelumBayar) {
+            return back()->with('error', 'Masih ada denda yang belum dibayar');
         }
 
         // CEK STOCK
@@ -189,6 +208,7 @@ class BukuController extends Controller
         return back()->with('success', 'Pengajuan peminjaman berhasil');
     }
 
+    // Menampilkan riwayat peminjaman user + auto update status terlambat & notifikasi
     public function riwayat(Request $request)
     {
         $query = Peminjaman::with('buku')
@@ -266,6 +286,7 @@ class BukuController extends Controller
     }
 
 
+    // Menampilkan data peminjaman untuk petugas (pending & dipinjam) + auto terlambat
     public function peminjaman(Request $request)
     {
         $query = Peminjaman::with('buku', 'user')
@@ -313,11 +334,11 @@ class BukuController extends Controller
         return view('petugas.peminjaman.buku', compact('data'));
     }
 
+    // Menampilkan data buku yang akan dikembalikan (menunggu konfirmasi)
     public function pengembalian(Request $request)
     {
         $query = Peminjaman::with('buku', 'user')
             ->whereIn('status', ['menunggu_kembali', 'terlambat']);
-
 
         if ($request->search) {
             $query->where(function ($q) use ($request) {
@@ -340,7 +361,7 @@ class BukuController extends Controller
         return view('petugas.pengembalian.buku', compact('data'));
     }
 
-    // Kembalikan 
+    // Mengajukan pengembalian buku oleh anggota (status jadi menunggu_kembali)
     public function kembalikan($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
@@ -354,7 +375,7 @@ class BukuController extends Controller
         return back()->with('success', 'Menunggu konfirmasi pengembalian');
     }
 
-    // Approve
+    // Menyetujui peminjaman, mengubah status dan mengurangi stok buku
     public function approve($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
@@ -375,7 +396,7 @@ class BukuController extends Controller
         return back()->with('success', 'Peminjaman disetujui');
     }
 
-    // Tolak
+    // Menolak peminjaman dan menghapus data pengajuan
     public function tolak($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
@@ -393,7 +414,7 @@ class BukuController extends Controller
         return back()->with('success', 'Peminjaman ditolak');
     }
 
-    //  Konfirmasi Pengembalian
+    // Mengkonfirmasi pengembalian, menghitung denda, dan menambah stok buku
     public function confirmKembali($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
@@ -414,7 +435,6 @@ class BukuController extends Controller
             $peminjaman->update([
                 'status' => 'selesai',
                 'tanggal_kembali' => $tanggalKembali,
-                'denda' => $denda,
                 'petugas_id' => auth()->id()
             ]);
 
@@ -429,6 +449,7 @@ class BukuController extends Controller
         return back()->with('success', 'Pengembalian dikonfirmasi');
     }
 
+    // Menampilkan data transaksi untuk kepala perpustakaan (dengan filter & search)
     public function transaksi(Request $request)
     {
         $query = \App\Models\Peminjaman::with(['user', 'buku', 'petugas']);
@@ -454,6 +475,7 @@ class BukuController extends Controller
         return view('kepalaperpus.transaksi', compact('data'));
     }
 
+    // Menampilkan dashboard kepala perpustakaan (statistik & grafik peminjaman)
     public function dashboardKepala(Request $request)
     {
         $totalBuku = \App\Models\Buku::count();
@@ -503,6 +525,7 @@ class BukuController extends Controller
         ));
     }
 
+    // Menampilkan dashboard petugas (ringkasan peminjaman & aktivitas terbaru)
     public function dashboardPetugas()
     {
         // Pengajuan (pending)
@@ -532,6 +555,7 @@ class BukuController extends Controller
         ));
     }
 
+    // Menampilkan dashboard anggota (pinjaman, denda, aktivitas)
     public function dashboardAnggota()
     {
         $userId = auth()->id();
@@ -578,6 +602,7 @@ class BukuController extends Controller
         ));
     }
 
+    // Mengekspor data transaksi menjadi file PDF
     public function exportPdf(Request $request)
     {
         $data = \App\Models\Peminjaman::with(['user', 'buku', 'petugas'])
@@ -587,5 +612,23 @@ class BukuController extends Controller
         $pdf = Pdf::loadView('pdf.transaksi', compact('data'));
 
         return $pdf->download('laporan-transaksi.pdf');
+    }
+
+    // Proses pembayaran denda dan mengubah status menjadi siap dikembalikan
+    public function bayarDenda($id)
+    {
+        $peminjaman = Peminjaman::findOrFail($id);
+
+        if ($peminjaman->denda > 0 && $peminjaman->status_denda == 'belum_bayar') {
+            $peminjaman->update([
+                'denda' => 0,
+                'status_denda' => 'sudah_bayar',
+                'status' => 'menunggu_kembali'
+            ]);
+
+            return back()->with('success', 'Denda berhasil dibayar');
+        }
+
+        return back()->with('error', 'Tidak ada denda yang perlu dibayar');
     }
 }

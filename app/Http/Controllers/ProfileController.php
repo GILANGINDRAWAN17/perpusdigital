@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
+    // Mengupdate data profil user (nama, NIK/NIS, nomor telepon)
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -23,6 +24,7 @@ class ProfileController extends Controller
         return back()->with('success', 'Profile berhasil diupdate');
     }
 
+    // Mengubah password user dengan validasi password lama dan konfirmasi password baru
     public function updatePassword(Request $request)
     {
         $request->validate([
@@ -45,6 +47,7 @@ class ProfileController extends Controller
        return back()->with('success', 'Password berhasil diubah');
     }
 
+    // Mengupdate foto profil user dan menghapus foto lama jika ada
     public function updateFoto(Request $request)
     {
         $request->validate([

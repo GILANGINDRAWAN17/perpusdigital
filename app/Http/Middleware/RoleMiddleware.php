@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
+    // Middleware untuk membatasi akses halaman berdasarkan role user
     public function handle($request, Closure $next, ...$roles)
     {
         // Belum login

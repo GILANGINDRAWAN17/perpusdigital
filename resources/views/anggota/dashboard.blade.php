@@ -111,7 +111,7 @@
                     {{-- KETERANGAN --}}
                     @if ($isJatuhTempo)
                         <p class="text-yellow-500 text-xs mt-2 font-medium">
-                            ⚠ Ada buku yang mendekati jatuh tempo
+                            ⚠ Ada buku yang jatuh tempo
                         </p>
                     @endif
                 </div>
@@ -175,7 +175,7 @@
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full">
-                            <thead class="bg-[#004d4d] text-white font-bold text-sm tracking-widest">
+                            <thead class="bg-[#004d4d] text-white font-bold text-sm">
                                 <tr>
                                     <th class="px-6 py-3 text-center">Cover</th>
                                     <th class="px-6 py-3 text-center">Judul Buku</th>

@@ -140,17 +140,30 @@
                                     </div>
 
                                     <!-- AKSI -->
-                                    <div class="text-center">
-                                        @if (in_array($item->status, ['menunggu_kembali', 'terlambat']))
+                                    <div class="text-center space-y-2">
+
+                                        {{-- Kalau ada denda dan belum bayar --}}
+                                        @if ($item->denda > 0 && $item->status_denda == 'belum_bayar')
+                                            <form action="{{ route('bayar.denda', $item->id) }}" method="POST">
+                                                @csrf
+                                                <button
+                                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded">
+                                                    Konfirmasi Denda
+                                                </button>
+                                            </form>
+
+                                            {{-- Kalau tidak ada denda / sudah bayar --}}
+                                        @elseif (in_array($item->status, ['menunggu_kembali', 'terlambat']))
                                             <form action="{{ route('pengembalian.confirm', $item->id) }}"
                                                 method="POST">
                                                 @csrf
                                                 <button
-                                                    class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                                                    Konfirmasi
+                                                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded">
+                                                    Konfirmasi Pengembalian
                                                 </button>
                                             </form>
                                         @endif
+
                                     </div>
 
                                 </div>

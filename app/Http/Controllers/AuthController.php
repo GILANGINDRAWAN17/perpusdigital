@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
+    // Menampilkan halaman login dan redirect user sesuai role jika sudah login
     public function indexLogin()
     {
         if (Auth::check()) {
@@ -33,6 +34,7 @@ class AuthController extends Controller
             ->header('Expires', 'Sat, 01 Jan 1990 00:00:00 GMT');
     }
 
+    // Proses login user dengan validasi username & password lalu redirect sesuai role
     public function masuk(Request $request)
     {
         $request->validate([
@@ -76,11 +78,11 @@ class AuthController extends Controller
         return redirect('/');
     }
 
+    // Proses registrasi user baru sebagai anggota dengan validasi dan enkripsi password
     public function daftar(Request $request)
     {
 
         // Validasi Input
-        // dd($request->all());
         $validasiData = $request->validate([
             "username" => "required|max:14|unique:users,username",
             "email" => "required|email|unique:users,email",
@@ -111,7 +113,7 @@ class AuthController extends Controller
         return redirect('/login')->with('success', 'Registrasi berhasil, silahkan login');
     }
 
-    // Fungsi Logout
+    // Proses logout user dan menghapus session
     public function logout(Request $request)
     {
         Auth::logout();

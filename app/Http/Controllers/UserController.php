@@ -7,9 +7,7 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Menampilkan daftar user dengan fitur search dan filter berdasarkan role
     public function index(Request $request)
     {
         $query = User::query();
@@ -32,18 +30,16 @@ class UserController extends Controller
 
         return view('kepalaperpus.daftaruser.user', compact('users'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     */
+
+
+    // Menampilkan halaman form tambah user
     public function create()
     {
         return view('kepalaperpus.daftaruser.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
+    // Menyimpan data user baru ke database dengan validasi
     public function store(Request $request)
     {
         $request->validate([
@@ -69,26 +65,21 @@ class UserController extends Controller
         return redirect('/daftaruser')->with('success', 'User berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
+    // (Tidak digunakan) menampilkan detail user
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // Menampilkan halaman edit data user
     public function edit(string $id)
     {
         $user = \App\Models\User::findOrFail($id);
         return view('kepalaperpus.daftaruser.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // Mengupdate data user dengan validasi
     public function update(Request $request, $id)
     {
         // VALIDASI DI SINI
@@ -117,9 +108,7 @@ class UserController extends Controller
         return redirect('/daftaruser')->with('success', 'User "' . $user->username . '" berhasil diupdate');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Menghapus data user dari database
     public function destroy($id)
     {
         $user = \App\Models\User::findOrFail($id);

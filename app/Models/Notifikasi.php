@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+// Model untuk menyimpan notifikasi ke user
 class Notifikasi extends Model
 {
     protected $table = 'notifications';

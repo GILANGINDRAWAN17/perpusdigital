@@ -6,11 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| PUBLIC
-|--------------------------------------------------------------------------
-*/
+/*PUBLIC*/
 
 Route::get('/', function () {
     return view('index');
@@ -24,19 +20,11 @@ Route::post('/register', [AuthController::class, 'daftar']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-/*
-|--------------------------------------------------------------------------
-| AUTH (SEMUA HARUS LOGIN)
-|--------------------------------------------------------------------------
-*/
+/*AUTH (SEMUA HARUS LOGIN)*/
 
 Route::middleware('auth')->group(function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | ANGGOTA
-    |--------------------------------------------------------------------------
-    */
+    /*ANGGOTA*/
     Route::middleware('role:anggota')->group(function () {
 
         Route::get('/dashboard', [BukuController::class, 'dashboardAnggota'])
@@ -56,20 +44,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile', function () {
             return view('anggota.profile.profileanggota');
         });
-
-        Route::put('/profile/update', [ProfileController::class, 'update'])
-            ->name('profile.update');
-
-        Route::post('/profile/password', [ProfileController::class, 'updatePassword'])
-            ->name('password.update');
     });
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | PETUGAS
-    |--------------------------------------------------------------------------
-    */
+    /*PETUGAS*/
     Route::middleware('role:petugas')->group(function () {
 
         Route::get('/dashboardpetugas', [BukuController::class, 'dashboardPetugas'])
@@ -90,13 +68,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/pengembalian', [BukuController::class, 'pengembalian'])
             ->name('pengembalian');
 
+        Route::post('/bayar-denda/{id}', [BukuController::class, 'bayarDenda'])
+            ->name('bayar.denda');
+
         Route::get('/profilepetugas', function () {
             return view('petugas.profile.profilepetugas');
         });
 
         // CRUD Buku
         Route::controller(BukuController::class)->group(function () {
-            Route::get('/buku', 'index')->name('buku.index');
             Route::get('/buku/create', 'create')->name('buku.create');
             Route::post('/buku', 'store')->name('buku.store');
             Route::get('/buku/{buku}/edit', 'edit')->name('buku.edit');
@@ -106,11 +86,7 @@ Route::middleware('auth')->group(function () {
     });
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | KEPALA PERPUSTAKAAN
-    |--------------------------------------------------------------------------
-    */
+    /*KEPALA PERPUSTAKAAN*/
     Route::middleware('role:kepala_perpustakaan')->group(function () {
 
         Route::get('/dashboardkepalaperpus', [BukuController::class, 'dashboardKepala'])
@@ -133,11 +109,17 @@ Route::middleware('auth')->group(function () {
     });
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | GLOBAL (SEMUA ROLE)
-    |--------------------------------------------------------------------------
-    */
+    /*GLOBAL (KECUALI ROUTE BUKU CUMA PETUGAS DAN KEPALA)*/
+
+    Route::get('/buku', [BukuController::class, 'index'])
+        ->name('buku.index')
+        ->middleware('role:petugas,kepala_perpustakaan');
+        
+    Route::put('/profile/update', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::post('/profile/password', [ProfileController::class, 'updatePassword'])
+        ->name('password.update');
 
     Route::post('/profile/foto', [ProfileController::class, 'updateFoto'])
         ->name('profile.foto');

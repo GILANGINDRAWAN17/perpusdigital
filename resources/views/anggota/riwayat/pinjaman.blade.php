@@ -97,7 +97,7 @@
 
                 <div class="flex-1 flex flex-col items-center">
                     @php
-                        $dipinjam = $data->whereIn('status', ['pending', 'dipinjam', 'menunggu_kembali', 'terlambat']);
+                        $dipinjam = $data->whereIn('status', ['pending', 'dipinjam', 'terlambat','menunggu_kembali']);
                     @endphp
 
                     @if ($dipinjam->count())
@@ -124,7 +124,7 @@
                                     {{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}
                                 </div>
 
-                               
+
 
                                 {{-- STATUS --}}
                                 <div class="truncate flex justify-center">
@@ -232,12 +232,17 @@
                                 </div>
 
                                 <div class="truncate flex justify-center">
-                                    @if ($item->denda > 0)
+                                    @if ($item->status_denda == 'sudah_bayar' && $item->denda == 0)
+                                        <span
+                                            class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs font-semibold">
+                                            Lunas
+                                        </span>
+                                    @elseif ($item->denda > 0)
                                         <span class="text-red-500 font-semibold">
                                             Rp {{ number_format($item->denda) }}
                                         </span>
                                     @else
-                                        -
+                                        <span class="text-gray-400">-</span>
                                     @endif
                                 </div>
 
