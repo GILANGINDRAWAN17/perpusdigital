@@ -454,7 +454,7 @@ class BukuController extends Controller
     {
         $query = \App\Models\Peminjaman::with(['user', 'buku', 'petugas']);
 
-        // SEARCH (opsional kalau mau dipakai dari filter bar)
+        // SEARCH
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->whereHas('buku', function ($q2) use ($request) {
@@ -465,9 +465,15 @@ class BukuController extends Controller
             });
         }
 
-        // FILTER STATUS
+        // STATUS
         if ($request->status) {
             $query->where('status', $request->status);
+        }
+
+        // BULAN
+        if ($request->bulan) {
+            $query->whereYear('tanggal_pinjam', substr($request->bulan, 0, 4))
+                ->whereMonth('tanggal_pinjam', substr($request->bulan, 5, 2));
         }
 
         $data = $query->latest()->paginate(5)->withQueryString();
@@ -605,9 +611,32 @@ class BukuController extends Controller
     // Mengekspor data transaksi menjadi file PDF
     public function exportPdf(Request $request)
     {
-        $data = \App\Models\Peminjaman::with(['user', 'buku', 'petugas'])
-            ->latest()
-            ->get();
+        $query = \App\Models\Peminjaman::with(['user', 'buku', 'petugas']);
+
+        // SEARCH
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('buku', function ($q2) use ($request) {
+                    $q2->where('judul_buku', 'like', '%' . $request->search . '%');
+                })->orWhereHas('user', function ($q2) use ($request) {
+                    $q2->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                });
+            });
+        }
+
+        // STATUS
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        // BULAN
+        if ($request->bulan) {
+            $query->whereYear('tanggal_pinjam', substr($request->bulan, 0, 4))
+                ->whereMonth('tanggal_pinjam', substr($request->bulan, 5, 2));
+        }
+
+
+        $data = $query->latest()->get();
 
         $pdf = Pdf::loadView('pdf.transaksi', compact('data'));
 

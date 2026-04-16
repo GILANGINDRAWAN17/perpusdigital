@@ -134,7 +134,7 @@
                     data: @json($chartData),
 
                     borderWidth: 3,
-                    tension: 0.4, // 🔥 smooth curve
+                    tension: 0.4, 
                     fill: true,
                     backgroundColor: 'rgba(0, 77, 77, 0.1)',
                     borderColor: '#004d4d',

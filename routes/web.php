@@ -110,7 +110,6 @@ Route::middleware('auth')->group(function () {
 
 
     /*GLOBAL (KECUALI ROUTE BUKU CUMA PETUGAS DAN KEPALA)*/
-
     Route::get('/buku', [BukuController::class, 'index'])
         ->name('buku.index')
         ->middleware('role:petugas,kepala_perpustakaan');
